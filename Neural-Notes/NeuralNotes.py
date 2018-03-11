@@ -26,6 +26,7 @@ def LoadTrainingSet(event):
 mainUI.tkRoot.protocol("WM_DELETE_WINDOW", WindowCloseCallback)
 mainUI.btnChooseTrainData.bind("<ButtonRelease-1>", appData.GetTrainDirectory)
 mainUI.btnLoadTraining.bind("<ButtonRelease-1>", LoadTrainingSet)
+mainUI.btnTrain.bind("<ButtonRelease-1>", rbmNet.Train)
 
 #Main loop.
 def AppMain():
