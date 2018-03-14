@@ -3,6 +3,7 @@
   <component name="ChangeListManager">
     <list default="true" id="caee319f-3794-4651-9229-4cc688bc4ca1" name="Default" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
+      <change beforePath="$PROJECT_DIR$/NeuralNotes.py" afterPath="$PROJECT_DIR$/NeuralNotes.py" />
       <change beforePath="$PROJECT_DIR$/RBMNet.py" afterPath="$PROJECT_DIR$/RBMNet.py" />
       <change beforePath="$PROJECT_DIR$/Test-Out-0.midi" afterPath="$PROJECT_DIR$/Test-Out-0.midi" />
       <change beforePath="$PROJECT_DIR$/Test-Out-1.midi" afterPath="$PROJECT_DIR$/Test-Out-1.midi" />
@@ -24,8 +25,8 @@
           <file leaf-file-name="NeuralNotes.py" pinned="false" current-in-tab="false">
             <entry file="file://$PROJECT_DIR$/NeuralNotes.py">
               <provider selected="true" editor-type-id="text-editor">
-                <state relative-caret-position="436">
-                  <caret line="31" column="14" lean-forward="false" selection-start-line="31" selection-start-column="14" selection-end-line="31" selection-end-column="14" />
+                <state relative-caret-position="351">
+                  <caret line="29" column="41" lean-forward="false" selection-start-line="29" selection-start-column="41" selection-end-line="29" selection-end-column="41" />
                   <folding>
                     <element signature="e#0#20#0" expanded="true" />
                   </folding>
@@ -48,11 +49,11 @@
           <file leaf-file-name="RBMNet.py" pinned="false" current-in-tab="true">
             <entry file="file://$PROJECT_DIR$/RBMNet.py">
               <provider selected="true" editor-type-id="text-editor">
-                <state relative-caret-position="60">
-                  <caret line="93" column="8" lean-forward="false" selection-start-line="93" selection-start-column="8" selection-end-line="93" selection-end-column="8" />
+                <state relative-caret-position="506">
+                  <caret line="106" column="0" lean-forward="true" selection-start-line="106" selection-start-column="0" selection-end-line="106" selection-end-column="0" />
                   <folding>
                     <element signature="e#0#23#0" expanded="true" />
-                    <element signature="e#1977#2719#0" expanded="false" />
+                    <element signature="e#2057#2799#0" expanded="false" />
                   </folding>
                 </state>
               </provider>
@@ -65,7 +66,7 @@
           <file leaf-file-name="GUIWrapper.py" pinned="false" current-in-tab="true">
             <entry file="file://$PROJECT_DIR$/GUIWrapper.py">
               <provider selected="true" editor-type-id="text-editor">
-                <state relative-caret-position="357">
+                <state relative-caret-position="765">
                   <caret line="45" column="57" lean-forward="false" selection-start-line="45" selection-start-column="57" selection-end-line="45" selection-end-column="57" />
                   <folding>
                     <element signature="e#0#21#0" expanded="true" />
@@ -280,7 +281,7 @@
           <caret line="112" column="44" lean-forward="true" selection-start-line="112" selection-start-column="44" selection-end-line="112" selection-end-column="44" />
           <folding>
             <element signature="e#0#23#0" expanded="true" />
-            <element signature="e#1977#2719#0" expanded="false" />
+            <element signature="e#2057#2799#0" expanded="false" />
           </folding>
         </state>
       </provider>
@@ -307,20 +308,10 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/GUIWrapper.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="357">
+        <state relative-caret-position="765">
           <caret line="45" column="57" lean-forward="false" selection-start-line="45" selection-start-column="57" selection-end-line="45" selection-end-column="57" />
           <folding>
             <element signature="e#0#21#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/NeuralNotes.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="436">
-          <caret line="31" column="14" lean-forward="false" selection-start-line="31" selection-start-column="14" selection-end-line="31" selection-end-column="14" />
-          <folding>
-            <element signature="e#0#20#0" expanded="true" />
           </folding>
         </state>
       </provider>
@@ -335,13 +326,23 @@
         </state>
       </provider>
     </entry>
+    <entry file="file://$PROJECT_DIR$/NeuralNotes.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="351">
+          <caret line="29" column="41" lean-forward="false" selection-start-line="29" selection-start-column="41" selection-end-line="29" selection-end-column="41" />
+          <folding>
+            <element signature="e#0#20#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
     <entry file="file://$PROJECT_DIR$/RBMNet.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="60">
-          <caret line="93" column="8" lean-forward="false" selection-start-line="93" selection-start-column="8" selection-end-line="93" selection-end-column="8" />
+        <state relative-caret-position="506">
+          <caret line="106" column="0" lean-forward="true" selection-start-line="106" selection-start-column="0" selection-end-line="106" selection-end-column="0" />
           <folding>
             <element signature="e#0#23#0" expanded="true" />
-            <element signature="e#1977#2719#0" expanded="false" />
+            <element signature="e#2057#2799#0" expanded="false" />
           </folding>
         </state>
       </provider>

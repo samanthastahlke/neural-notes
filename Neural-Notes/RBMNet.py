@@ -5,12 +5,12 @@ from tqdm import tqdm
 import numpy as num
 import os
 
+MODEL_LOC = os.path.dirname(os.path.realpath(__file__)) + '/models/rbmnet.chkpt'
 DEFAULT_TIMESTEPS = 15
 DEFAULT_HNODES = 50
 DEFAULT_EPOCHS = 200
 DEFAULT_BATCHSIZE = 100
 DEFAULT_LEARNRATE = 0.005
-
 
 def ProbSample(p):
     return tf.floor(p + tf.random_uniform(tf.shape(p), 0, 1))
@@ -91,7 +91,7 @@ class RBMNet:
         if not len(self.trainDataset) > 0:
             print("Can't train without any data!")
             return
-        
+
         note_sample = Gibbs(k=1, x=self.notedata, wMatrix=self.wMatrix, hBias=self.hBias, vBias=self.vBias)
         h = ProbSample(tf.sigmoid(tf.matmul(self.notedata, self.wMatrix) + self.hBias))
         h_sample = ProbSample(tf.sigmoid(tf.matmul(note_sample, self.wMatrix) + self.hBias))
@@ -112,6 +112,8 @@ class RBMNet:
             init = tf.global_variables_initializer()
             session.run(init)
 
+            netSaver = tf.train.Saver(tf.global_variables())
+
             for epoch in tqdm(range(self.epochs)):
 
                 for tData in self.trainDataset:
@@ -123,20 +125,38 @@ class RBMNet:
                         tr_x = tData[i:i + self.batchSize]
                         session.run(trainUpdate, feed_dict={self.notedata: tr_x})
 
+            netSaver.save(session, MODEL_LOC)
+            self.trained = True
 
-            sample = Gibbs(k=1, x=self.notedata, wMatrix=self.wMatrix, hBias=self.hBias, vBias=self.vBias).eval(session=session, feed_dict={self.notedata: num.zeros((5, self.vNodes))})
+            '''
+            sample = Gibbs(k=1, x=self.notedata, wMatrix=self.wMatrix, hBias=self.hBias, vBias=self.vBias).eval(session=self.trainSession, feed_dict={self.notedata: num.zeros((5, self.vNodes))})
             for i in range(sample.shape[0]):
                 if not any(sample[i, :]):
                     continue
                 S = num.reshape(sample[i, :], (self.timesteps, 2 * self.notespan))
                 self.midi.FVtoMIDI(S, os.path.abspath(os.curdir) + "\\Test-Out-{}".format(i))
+                '''
 
         return
 
-    def Generate(self):
+    def Generate(self, event):
+
         if not self.trained:
             print("Can't generate on an untrained network!")
             return
+
+        with tf.Session() as session:
+
+            netLoader = tf.train.Saver()
+            netLoader.restore(session, MODEL_LOC)
+
+            sample = Gibbs(k=1, x=self.notedata, wMatrix=self.wMatrix, hBias=self.hBias, vBias=self.vBias).eval(
+                session=session, feed_dict={self.notedata: num.zeros((5, self.vNodes))})
+            for i in range(sample.shape[0]):
+                if not any(sample[i, :]):
+                    continue
+                S = num.reshape(sample[i, :], (self.timesteps, 2 * self.notespan))
+                self.midi.FVtoMIDI(S, os.path.abspath(os.curdir) + "\\Test-Out-{}".format(i))
 
         return
 
