@@ -6,6 +6,7 @@ import numpy as num
 import os
 
 MODEL_LOC = os.path.dirname(os.path.realpath(__file__)) + '/models/rbmnet.chkpt'
+MODEL_LOC_CHECK = os.path.dirname(os.path.realpath(__file__)) + '/models/rbmnet.chkpt.index'
 DEFAULT_TIMESTEPS = 15
 DEFAULT_HNODES = 50
 DEFAULT_EPOCHS = 200
@@ -61,6 +62,26 @@ class RBMNet:
         self.vBias = tf.Variable(tf.zeros([1, self.vNodes], tf.float32, name="vBias"))
         self.hBias = tf.Variable(tf.zeros([1, self.hNodes], tf.float32, name="hBias"))
 
+        self.note_sample = Gibbs(k=1, x=self.notedata, wMatrix=self.wMatrix,
+                            hBias=self.hBias, vBias=self.vBias)
+
+        self.hdata = ProbSample(tf.sigmoid(tf.matmul(self.notedata, self.wMatrix) + self.hBias))
+        self.h_sample = ProbSample(tf.sigmoid(tf.matmul(self.note_sample, self.wMatrix) + self.hBias))
+
+        self.elemShape = tf.cast(tf.shape(self.notedata)[0], tf.float32)
+        self.wAdjust = tf.multiply(self.learnRate / self.elemShape,
+                              tf.subtract(tf.matmul(tf.transpose(self.notedata), self.hdata),
+                                          tf.matmul(tf.transpose(self.note_sample), self.h_sample)))
+
+        self.vBAdjust = tf.multiply(self.learnRate / self.elemShape,
+                               tf.reduce_sum(tf.subtract(self.notedata, self.note_sample), 0, True))
+        self.hBAdjust = tf.multiply(self.learnRate / self.elemShape,
+                               tf.reduce_sum(tf.subtract(self.hdata, self.h_sample), 0, True))
+
+        self.trainUpdate = [self.wMatrix.assign_add(self.wAdjust),
+                            self.vBias.assign_add(self.vBAdjust),
+                            self.hBias.assign_add(self.hBAdjust)]
+
     def LoadTrainingSet(self, directory):
 
         if directory is None:
@@ -92,21 +113,6 @@ class RBMNet:
             print("Can't train without any data!")
             return
 
-        note_sample = Gibbs(k=1, x=self.notedata, wMatrix=self.wMatrix, hBias=self.hBias, vBias=self.vBias)
-        h = ProbSample(tf.sigmoid(tf.matmul(self.notedata, self.wMatrix) + self.hBias))
-        h_sample = ProbSample(tf.sigmoid(tf.matmul(note_sample, self.wMatrix) + self.hBias))
-
-        size_bt = tf.cast(tf.shape(self.notedata)[0], tf.float32)
-        W_adder = tf.multiply(self.learnRate / size_bt,
-                              tf.subtract(tf.matmul(tf.transpose(self.notedata), h), tf.matmul(tf.transpose(note_sample), h_sample)))
-
-        bv_adder = tf.multiply(self.learnRate / size_bt,
-                               tf.reduce_sum(tf.subtract(self.notedata, note_sample), 0, True))
-        bh_adder = tf.multiply(self.learnRate / size_bt,
-                               tf.reduce_sum(tf.subtract(h, h_sample), 0, True))
-
-        trainUpdate = [self.wMatrix.assign_add(W_adder), self.vBias.assign_add(bv_adder), self.hBias.assign_add(bh_adder)]
-
         with tf.Session() as session:
 
             init = tf.global_variables_initializer()
@@ -123,25 +129,16 @@ class RBMNet:
 
                     for i in range(1, len(tData), self.batchSize):
                         tr_x = tData[i:i + self.batchSize]
-                        session.run(trainUpdate, feed_dict={self.notedata: tr_x})
+                        session.run(self.trainUpdate, feed_dict={self.notedata: tr_x})
 
             netSaver.save(session, MODEL_LOC)
             self.trained = True
-
-            '''
-            sample = Gibbs(k=1, x=self.notedata, wMatrix=self.wMatrix, hBias=self.hBias, vBias=self.vBias).eval(session=self.trainSession, feed_dict={self.notedata: num.zeros((5, self.vNodes))})
-            for i in range(sample.shape[0]):
-                if not any(sample[i, :]):
-                    continue
-                S = num.reshape(sample[i, :], (self.timesteps, 2 * self.notespan))
-                self.midi.FVtoMIDI(S, os.path.abspath(os.curdir) + "\\Test-Out-{}".format(i))
-                '''
 
         return
 
     def Generate(self, event):
 
-        if not self.trained:
+        if not (self.trained or os.path.isfile(MODEL_LOC_CHECK)):
             print("Can't generate on an untrained network!")
             return
 
