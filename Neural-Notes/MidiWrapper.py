@@ -7,7 +7,7 @@ import numpy as num
 
 class NNMidiUtility:
 
-    def __init__(self, lowBound=24, highBound=109):
+    def __init__(self, lowBound=36, highBound=85):
 
         #Establish the range of notes we'll consider in the model.
         self.lowBound = lowBound
@@ -16,6 +16,7 @@ class NNMidiUtility:
 
     def MIDItoFV(self, filename):
 
+        #print(filename)
         #Grab the MIDI file as an event list from Python-MIDI.
         midiEvents = midi.read_midifile(filename)
 
@@ -61,7 +62,7 @@ class NNMidiUtility:
                         if (tEvent.pitch < self.lowBound) or (tEvent.pitch >= self.highBound):
                             pass
                         #Register note "presses".
-                        if isinstance(tEvent, midi.NoteOnEvent) and tEvent.velocity != 0:
+                        elif isinstance(tEvent, midi.NoteOnEvent) and tEvent.velocity != 0:
                             curState[tEvent.pitch - self.lowBound] = [1,1]
                         #Register note "releases".
                         else:

@@ -9,7 +9,7 @@ MODEL_LOC = os.path.dirname(os.path.realpath(__file__)) + '/models/rbmnet.chkpt'
 MODEL_LOC_CHECK = os.path.dirname(os.path.realpath(__file__)) + '/models/rbmnet.chkpt.index'
 DEFAULT_TIMESTEPS = 15
 DEFAULT_HNODES = 50
-DEFAULT_EPOCHS = 200
+DEFAULT_EPOCHS = 300
 DEFAULT_BATCHSIZE = 100
 DEFAULT_LEARNRATE = 0.005
 

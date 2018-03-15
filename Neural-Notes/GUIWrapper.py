@@ -1,6 +1,12 @@
-from tkinter import *
+import tkinter as tk
 from tkinter import filedialog
+from PIL import Image, ImageTk
 import time
+
+BG_COL = '#000000'
+TXT_COL = '#ffffff'
+LIT_COL = '#00ff96'
+PADDING = 4
 
 class FrameMgr:
 
@@ -27,37 +33,60 @@ class AppData:
     def GetTrainDirectory(self, event):
         self.trainDataDirectory = ChooseDirectory("Choose Training Directory")
 
+def configUIButton(btn):
+    btn.configure(bg=BG_COL, fg=TXT_COL,
+                  activebackground=BG_COL,
+                  activeforeground=LIT_COL,
+                  relief=tk.FLAT)
+    btn.bind('<Enter>', lambda event, b=btn:
+                btn.configure(state='active'))
+
 class MainUI:
 
     def __init__(self):
 
         self.running = True
 
-        self.tkRoot = Tk()
+        self.tkRoot = tk.Tk()
         self.tkRoot.geometry("640x480")
+        self.tkRoot.configure(bg=BG_COL,
+                              highlightbackground=BG_COL,
+                              highlightthickness=0)
 
-        self.mainContainer = Frame(self.tkRoot)
+        iTitle = Image.open('img/title.png')
+        szTitle = 512, 128
+        iTitle.thumbnail(szTitle, Image.ANTIALIAS)
+        self.imgTitle = ImageTk.PhotoImage(iTitle)
+        self.dispTitle = tk.Label(self.tkRoot, image=self.imgTitle, bg='#000000')
+        self.dispTitle.pack(pady=(100,10))
+
+        self.mainContainer = tk.Frame(self.tkRoot,background=BG_COL)
         self.mainContainer.pack()
 
-        self.btnChooseTrainData = Button(self.mainContainer)
-        self.btnChooseTrainData.configure(text="Choose training folder...")
-        self.btnChooseTrainData.pack({"side": LEFT})
+        self.btnChooseTrainData = tk.Button(self.mainContainer,
+                                            text="Choose training folder...")
+        configUIButton(self.btnChooseTrainData)
+        self.btnChooseTrainData.pack(pady=PADDING)
 
-        self.btnLoadTraining = Button(self.mainContainer)
-        self.btnLoadTraining.configure(text="Load training data")
-        self.btnLoadTraining.pack({"side": LEFT})
+        self.btnLoadTraining = tk.Button(self.mainContainer,
+                                         text="Load training data")
+        configUIButton(self.btnLoadTraining)
+        self.btnLoadTraining.pack(pady=PADDING)
 
-        self.btnTrain = Button(self.mainContainer)
-        self.btnTrain.configure({"text": "Train!"})
-        self.btnTrain.pack({"side": LEFT})
+        self.btnTrain = tk.Button(self.mainContainer,
+                                  text="Train!")
+        configUIButton(self.btnTrain)
+        self.btnTrain.pack(pady=PADDING)
 
-        self.btnGenerate = Button(self.mainContainer)
-        self.btnGenerate.configure(text="Generate new music!")
-        self.btnGenerate.pack({"side": LEFT})
+        self.btnGenerate = tk.Button(self.mainContainer,
+                                     text="Generate new music!")
+        configUIButton(self.btnGenerate)
+        self.btnGenerate.pack(pady=PADDING)
 
-        self.btnQuit = Button(self.mainContainer)
-        self.btnQuit.configure(text="Quit")
-        self.btnQuit.pack({"side": RIGHT})
+        self.btnQuit = tk.Button(self.mainContainer,
+                                 text="Quit")
+        configUIButton(self.btnQuit)
+        self.btnQuit.pack(pady=PADDING)
         self.btnQuit.bind("<ButtonRelease-1>", self.Quit)
 
     def Quit(self, event):
