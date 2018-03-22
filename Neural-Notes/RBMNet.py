@@ -7,9 +7,9 @@ import os
 
 MODEL_LOC = os.path.dirname(os.path.realpath(__file__)) + '/models/rbmnet.chkpt'
 MODEL_LOC_CHECK = os.path.dirname(os.path.realpath(__file__)) + '/models/rbmnet.chkpt.index'
-DEFAULT_TIMESTEPS = 15
+DEFAULT_TIMESTEPS = 48
 DEFAULT_HNODES = 50
-DEFAULT_EPOCHS = 300
+DEFAULT_EPOCHS = 75
 DEFAULT_BATCHSIZE = 100
 DEFAULT_LEARNRATE = 0.005
 
@@ -33,19 +33,17 @@ def Gibbs(k, x, wMatrix, hBias, vBias):
 
 class RBMNet:
 
-    def __init__(self, midiUtil, minTrainingSnippet=32):
+    def __init__(self, midiUtil):
         self.midi = midiUtil
-        self.minTrainingSnippet = minTrainingSnippet
-
         self.trainDataset = []
         self.trained = False
 
-        self.InitDefaultParameters()
+        self.InitNNParameters()
 
         os.environ['TF_CPP_MIN_LOG_LEVEL'] = '2'
         return
 
-    def InitDefaultParameters(self):
+    def InitNNParameters(self):
         self.notespan = self.midi.notespan
         self.timesteps = DEFAULT_TIMESTEPS
 
@@ -95,7 +93,7 @@ class RBMNet:
             try:
                 fv = num.array(self.midi.MIDItoFV(midifile))
 
-                if num.array(fv).shape[0] > self.minTrainingSnippet:
+                if num.array(fv).shape[0] > self.timesteps:
                     self.trainDataset.append(fv)
             except Exception as e:
                 print(e)
