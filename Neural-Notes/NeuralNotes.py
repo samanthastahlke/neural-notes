@@ -24,14 +24,14 @@ def LoadTrainingSet(event):
 
 #Setup global Tkinter handlers.
 mainUI.tkRoot.protocol("WM_DELETE_WINDOW", WindowCloseCallback)
-mainUI.btnChooseTrainData.bind("<ButtonRelease-1>", appData.GetTrainDirectory)
-mainUI.btnLoadTraining.bind("<ButtonRelease-1>", LoadTrainingSet)
+#mainUI.btnChooseTrainData.bind("<ButtonRelease-1>", appData.GetTrainDirectory)
+#mainUI.btnLoadTraining.bind("<ButtonRelease-1>", LoadTrainingSet)
 #mainUI.btnTrain.bind("<ButtonRelease-1>", rbmNet.Train)
 #mainUI.btnGenerate.bind("<ButtonRelease-1>", rbmNet.Generate)
 
 #Main loop.
 def AppMain():
-
+#
     while mainUI.running:
 
         frame.Tick()

@@ -5,6 +5,7 @@ import time
 
 BG_COL = '#000000'
 TXT_COL = '#ffffff'
+BTN_COL = '#202020'
 FIELD_COL = '#303030'
 LIT_COL = '#00ff96'
 PADDING = 4
@@ -66,6 +67,14 @@ def configUIButton(btn):
     btn.bind('<Enter>', lambda event, b=btn:
                 btn.configure(state='active'))
 
+def configUIButtonSquare(btn):
+    btn.configure(bg=BTN_COL, fg=TXT_COL,
+                  activebackground=FIELD_COL,
+                  activeforeground=LIT_COL,
+                  relief=tk.FLAT)
+    btn.bind('<Enter>', lambda event, b=btn:
+             btn.configure(state='active'))
+
 def configUILabel(lbl):
     lbl.configure(bg=BG_COL, fg=TXT_COL)
 
@@ -75,8 +84,10 @@ def configUIField(txt):
                   relief=tk.FLAT)
 
 def configUIToggle(tog):
-    tog.configure(bg=BG_COL, fg=FIELD_COL,
+    tog.configure(bg=BG_COL, fg=TXT_COL,
                   activebackground=BG_COL,
+                  activeforeground=TXT_COL,
+                  selectcol=BG_COL,
                   relief=tk.FLAT)
 '''
 MainUI class. 
@@ -115,21 +126,21 @@ class MainUI:
         self.dispTitle = tk.Label(self.mainContainer, image=self.imgTitle, bg='#000000')
         self.dispTitle.pack(pady=(100,10))
 
-        self.btnChooseTrainData = tk.Button(self.mainContainer,
-                                            text="Choose training folder...")
-        configUIButton(self.btnChooseTrainData)
-        self.btnChooseTrainData.pack(pady=PADDING)
-
-        self.btnLoadTraining = tk.Button(self.mainContainer,
-                                         text="Load training data")
-        configUIButton(self.btnLoadTraining)
-        self.btnLoadTraining.pack(pady=PADDING)
-
         self.btnTrain = tk.Button(self.mainContainer,
                                   text="Train...")
         configUIButton(self.btnTrain)
         self.btnTrain.pack(pady=PADDING)
         self.btnTrain.bind("<ButtonRelease-1>", self.GoTrain)
+
+        self.btnChooseTrainData = tk.Button(self.mainContainer,
+                                            text="Load Model...")
+        configUIButton(self.btnChooseTrainData)
+        self.btnChooseTrainData.pack(pady=PADDING)
+
+        self.btnLoadTraining = tk.Button(self.mainContainer,
+                                         text="Save Current Model...")
+        configUIButton(self.btnLoadTraining)
+        self.btnLoadTraining.pack(pady=PADDING)
 
         self.btnGenerate = tk.Button(self.mainContainer,
                                      text="Generate...")
@@ -147,133 +158,200 @@ class MainUI:
         self.trainContainer = tk.Frame(self.rootContainer, background=BG_COL)
         self.trainContainer.grid_configure(row=0, column=0, sticky="nsew")
 
+        row = 0
+        col = 0
+
         self.tLblTitle = tk.Label(self.trainContainer,
                                   text="Training")
         configUILabel(self.tLblTitle)
-        self.tLblTitle.pack(pady=PADDING)
+        self.tLblTitle.configure(foreground=LIT_COL)
+        self.tLblTitle.grid(row=row,column=col,sticky=tk.W,pady=PADDING*2,padx=PADDING*2)
+
+        row += 1
 
         self.tLblStatus = tk.Label(self.trainContainer,
-                                text="STATUS: ")
+                                text="STATUS: ---")
         configUILabel(self.tLblStatus)
-        self.tLblStatus.pack(pady=PADDING)
+        self.tLblStatus.grid(row=row,column=col,sticky=tk.W,padx=PADDING*2)
+
+        row += 1
+        col = 0
 
         self.tBtnChooseData = tk.Button(self.trainContainer,
                                         text="Choose training folder...")
-        configUIButton(self.tBtnChooseData)
-        self.tBtnChooseData.pack(pady=PADDING)
+        configUIButtonSquare(self.tBtnChooseData)
+        self.tBtnChooseData.grid(row=row,column=col,sticky=tk.W,pady=PADDING*2,padx=PADDING*2)
 
-        self.tLblEpochs = tk.Label(self.trainContainer,
+        row += 1
+
+        #Training fields.
+        self.trainContainer.grid_rowconfigure(row,weight=1)
+        self.trainFieldsContainer = tk.Frame(self.trainContainer, background=BG_COL)
+        self.trainFieldsContainer.grid(row=row,column=0,columnspan=2,sticky=tk.W,pady=PADDING*4,padx=PADDING*2)
+
+        fRow = 0
+
+        self.tLblEpochs = tk.Label(self.trainFieldsContainer,
                                    text="Epochs: ")
         configUILabel(self.tLblEpochs)
-        self.tLblEpochs.pack(pady=PADDING)
-
-        self.tTxtEpochs = tk.Entry(self.trainContainer)
+        self.tLblEpochs.grid(row=fRow,column=0,sticky=tk.E,pady=PADDING*2,padx=PADDING)
+        self.tTxtEpochs = tk.Entry(self.trainFieldsContainer)
         configUIField(self.tTxtEpochs)
-        self.tTxtEpochs.pack(pady=PADDING)
+        self.tTxtEpochs.grid(row=fRow,column=1,sticky=tk.W,pady=PADDING*2,padx=PADDING)
         self.tTxtEpochs.insert(0, "---")
 
-        self.tLblLearn = tk.Label(self.trainContainer,
+        fRow += 1
+
+        self.tLblLearn = tk.Label(self.trainFieldsContainer,
                                   text="Learning Rate: ")
         configUILabel(self.tLblLearn)
-        self.tLblLearn.pack(pady=PADDING)
+        self.tLblLearn.grid(row=fRow,column=0,sticky=tk.E,pady=PADDING*2,padx=PADDING)
 
-        self.tTxtLearn = tk.Entry(self.trainContainer)
+        self.tTxtLearn = tk.Entry(self.trainFieldsContainer)
         configUIField(self.tTxtLearn)
-        self.tTxtLearn.pack(pady=PADDING)
+        self.tTxtLearn.grid(row=fRow,column=1,sticky=tk.W,pady=PADDING*2,padx=PADDING)
         self.tTxtLearn.insert(0, "---")
 
-        self.tLblNodes = tk.Label(self.trainContainer,
+        fRow += 1
+
+        self.tLblNodes = tk.Label(self.trainFieldsContainer,
                                   text="Hidden Nodes: ")
         configUILabel(self.tLblNodes)
-        self.tLblNodes.pack(pady=PADDING)
+        self.tLblNodes.grid(row=fRow,column=0,sticky=tk.E,pady=PADDING*2,padx=PADDING)
 
-        self.tTxtNodes = tk.Entry(self.trainContainer)
+        self.tTxtNodes = tk.Entry(self.trainFieldsContainer)
         configUIField(self.tTxtNodes)
-        self.tTxtNodes.pack(pady=PADDING)
+        self.tTxtNodes.grid(row=fRow,column=1,sticky=tk.W,pady=PADDING*2,padx=PADDING)
         self.tTxtNodes.insert(0, "---")
 
-        self.tLblTimesteps = tk.Label(self.trainContainer,
+        fRow += 1
+
+        self.tLblTimesteps = tk.Label(self.trainFieldsContainer,
                                       text="Timesteps: ")
         configUILabel(self.tLblTimesteps)
-        self.tLblTimesteps.pack(pady=PADDING)
+        self.tLblTimesteps.grid(row=fRow,column=0,sticky=tk.E,pady=PADDING*2,padx=PADDING)
 
-        self.tTxtTimesteps = tk.Entry(self.trainContainer)
+        self.tTxtTimesteps = tk.Entry(self.trainFieldsContainer)
         configUIField(self.tTxtTimesteps)
-        self.tTxtTimesteps.pack(pady=PADDING)
+        self.tTxtTimesteps.grid(row=fRow,column=1,sticky=tk.W,pady=PADDING*2,padx=PADDING)
         self.tTxtTimesteps.insert(0, "---")
 
+        row += 1
+        col = 0
+
+        self.trainContainer.grid_rowconfigure(row,weight=1)
         self.tBtnChooseSave = tk.Button(self.trainContainer,
                                         text="Choose model save directory...")
-        configUIButton(self.tBtnChooseSave)
-        self.tBtnChooseSave.pack(pady=PADDING)
+        configUIButtonSquare(self.tBtnChooseSave)
+        self.tBtnChooseSave.grid(row=row,column=col,sticky="sw",pady=PADDING,padx=PADDING*2)
+
+        row += 1
+        col = 0
 
         self.saveModel = False
         self.tTogSave = tk.Checkbutton(self.trainContainer,
-                                       var=self.saveModel)
+                                       var=self.saveModel,
+                                       text="Save model to ")
         configUIToggle(self.tTogSave)
-        self.tTogSave.pack(pady=PADDING)
+        self.tTogSave.grid(row=row,column=col,sticky=tk.W,pady=PADDING,padx=PADDING)
+
+        col += 1
 
         self.tLblSave = tk.Label(self.trainContainer,
-                                 text="Save model to ---")
+                                 text="---")
         configUILabel(self.tLblSave)
-        self.tLblSave.pack(pady=PADDING)
+        self.tLblSave.grid(row=row,column=col,sticky=tk.W,pady=PADDING,padx=PADDING)
 
+        row += 1
+        col = 0
 
         self.tBtnBack = tk.Button(self.trainContainer,
                                   text="Back")
-        configUIButton(self.tBtnBack)
-        self.tBtnBack.pack(pady=PADDING)
+        configUIButtonSquare(self.tBtnBack)
+        self.tBtnBack.grid(row=row,column=col,sticky="sw",pady=PADDING*2,padx=PADDING*2)
         self.tBtnBack.bind("<ButtonRelease-1>", self.GoMain)
+
+        col += 2
+        self.trainContainer.grid_columnconfigure(col,weight=1)
+        self.tBtnLoadData = tk.Button(self.trainContainer,
+                                      text="Load Data")
+        configUIButtonSquare(self.tBtnLoadData)
+        self.tBtnLoadData.grid(row=row,column=col,sticky="se",pady=PADDING*2)
+
+        col += 1
 
         self.tBtnTrain = tk.Button(self.trainContainer,
                                    text="Train!")
-        configUIButton(self.tBtnTrain)
-        self.tBtnTrain.pack(pady=PADDING)
+        configUIButtonSquare(self.tBtnTrain)
+        self.tBtnTrain.grid(row=row,column=col,sticky="se",pady=PADDING*2,padx=PADDING*2)
 
         #Generation screen.
         self.genContainer = tk.Frame(self.rootContainer, background=BG_COL)
         self.genContainer.grid_configure(row=0, column=0, sticky="nsew")
 
+        row = 0
+        col = 0
+
         self.gLblTitle = tk.Label(self.genContainer,
                                   text="Generation")
         configUILabel(self.gLblTitle)
-        self.gLblTitle.pack(pady=PADDING)
+        self.gLblTitle.grid(row=row,column=col,sticky=tk.W,pady=PADDING*2,padx=PADDING*2)
+
+        row += 1
 
         self.gLblStatus = tk.Label(self.genContainer,
-                                   text="STATUS: ")
+                                   text="STATUS: ---")
         configUILabel(self.gLblStatus)
-        self.gLblStatus.pack(pady=PADDING)
+        self.gLblStatus.grid(row=row,column=col,sticky=tk.W,padx=PADDING*2)
+
+        row += 1
 
         self.gBtnChooseModel = tk.Button(self.genContainer,
                                         text="Load Model...")
-        configUIButton(self.gBtnChooseModel)
-        self.gBtnChooseModel.pack(pady=PADDING)
+        configUIButtonSquare(self.gBtnChooseModel)
+        self.gBtnChooseModel.grid(row=row,column=col,sticky=tk.W,pady=PADDING,padx=PADDING*2)
 
-        self.gLblSamples = tk.Label(self.genContainer,
+        row += 1
+
+        self.genContainer.rowconfigure(row,weight=1)
+        self.genFieldsContainer = tk.Frame(self.genContainer,background=BG_COL)
+        self.genFieldsContainer.grid_configure(row=row,column=col,pady=PADDING*2,padx=PADDING*2)
+
+        fRow = 0
+
+        self.gLblSamples = tk.Label(self.genFieldsContainer,
                                    text="Samples: ")
         configUILabel(self.gLblSamples)
-        self.gLblSamples.pack(pady=PADDING)
+        self.gLblSamples.grid(row=fRow,column=0,pady=PADDING*2,padx=PADDING)
 
-        self.gTxtSamples = tk.Entry(self.genContainer)
+        self.gTxtSamples = tk.Entry(self.genFieldsContainer)
         configUIField(self.gTxtSamples)
-        self.gTxtSamples.pack(pady=PADDING)
+        self.gTxtSamples.grid(row=fRow,column=1,pady=PADDING*2,padx=PADDING)
         self.gTxtSamples.insert(0, "---")
 
+        row += 1
+
+        self.genContainer.rowconfigure(row,weight=1)
         self.gBtnChooseSave = tk.Button(self.genContainer,
                                         text="Choose sample save directory...")
-        configUIButton(self.gBtnChooseSave)
-        self.gBtnChooseSave.pack(pady=PADDING)
+        configUIButtonSquare(self.gBtnChooseSave)
+        self.gBtnChooseSave.grid(row=row,column=col,sticky="sw",pady=PADDING,padx=PADDING*2)
+
+        row += 1
 
         self.gBtnBack = tk.Button(self.genContainer,
                                   text="Back")
-        configUIButton(self.gBtnBack)
-        self.gBtnBack.pack(pady=PADDING)
+        configUIButtonSquare(self.gBtnBack)
+        self.gBtnBack.grid(row=row,column=col,sticky="sw",pady=PADDING*2,padx=PADDING*2)
         self.gBtnBack.bind("<ButtonRelease-1>", self.GoMain)
+
+        col += 2
+        self.genContainer.columnconfigure(col,weight=1)
 
         self.gBtnGen = tk.Button(self.genContainer,
                                  text="Generate!")
-        configUIButton(self.gBtnGen)
-        self.gBtnGen.pack(pady=PADDING)
+        configUIButtonSquare(self.gBtnGen)
+        self.gBtnGen.grid(row=row,column=col,sticky="se",pady=PADDING*2,padx=PADDING*2)
 
         self.mainContainer.tkraise()
 

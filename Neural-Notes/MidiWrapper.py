@@ -73,7 +73,6 @@ class NNMidiUtility:
                     #Ignore non-4 time signatures FOR NOW.
                     elif isinstance(tEvent, midi.TimeSignatureEvent):
                         if tEvent.numerator not in (2, 4):
-                            print("SKIPPING FILE!")
                             keepParsing = False
                             break
 
