@@ -36,6 +36,11 @@ def GetModelSaveDirectory(event):
     mainUI.tLblSave.configure(text=appData.modelSaveDirectory)
     return
 
+def SaveModel(event):
+    GetModelSaveDirectory(event)
+    rbmNet.SaveModel(event, appData.modelSaveDirectory)
+    return
+
 def GetModelLoadDirectory(event):
     appData.GetModelLoadDirectory(event)
     return
@@ -104,12 +109,12 @@ def TriggerTrain(event):
 
 #Setup global Tkinter handlers.
 mainUI.tkRoot.protocol("WM_DELETE_WINDOW", WindowCloseCallback)
-mainUI.btnLoadModel.bind("<ButtonRelease-1>", GetModelLoadDirectory)
-mainUI.btnSaveModel.bind("<ButtonRelease-1>", GetModelSaveDirectory)
+mainUI.btnSaveModel.bind("<ButtonRelease-1>", SaveModel)
 mainUI.tBtnChooseData.bind("<ButtonRelease-1>", appData.GetTrainDirectory)
 mainUI.tBtnLoadData.bind("<ButtonRelease-1>", LoadTrainingSet)
 mainUI.tBtnChooseSave.bind("<ButtonRelease-1>", GetModelSaveDirectory)
 mainUI.tBtnTrain.bind("<ButtonRelease-1>", TriggerTrain)
+mainUI.gBtnChooseModel.bind("<ButtonRelease-1>", GetModelLoadDirectory)
 mainUI.gBtnChooseSave.bind("<ButtonRelease-1>", GetSampleSaveDirectory)
 mainUI.gBtnGen.bind("<ButtonRelease-1>", TriggerGen)
 

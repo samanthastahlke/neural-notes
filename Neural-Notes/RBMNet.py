@@ -4,9 +4,11 @@ import glob
 from tqdm import tqdm
 import numpy as num
 import os
+import shutil
 
 MODEL_LOC = os.path.dirname(os.path.realpath(__file__)) + '/data/tmp_model/rbmnet.chkpt'
 MODEL_LOC_CHECK = os.path.dirname(os.path.realpath(__file__)) + '/data/tmp_model/rbmnet.chkpt.index'
+MODEL_SAVE_LOC = os.path.dirname(os.path.realpath(__file__)) + '/data/tmp_model'
 SAMPLE_LOC = os.path.dirname(os.path.realpath(__file__)) + '/sampleout'
 
 DEFAULT_TIMESTEPS = 48
@@ -38,15 +40,17 @@ class RBMNet:
     def __init__(self, midiUtil):
         self.midi = midiUtil
         self.trainDataset = []
-        self.trained = False
         self.InitNNParameters()
 
         os.environ['TF_CPP_MIN_LOG_LEVEL'] = '2'
         return
 
     def InitNNParameters(self):
+        tf.reset_default_graph()
+
         self.notespan = self.midi.notespan
         self.timesteps = DEFAULT_TIMESTEPS
+        self.tfTimesteps = tf.Variable(DEFAULT_TIMESTEPS, name="timesteps")
         self.genSample = DEFAULT_SAMPLES
 
         self.vNodes = 2 * self.notespan * self.timesteps
@@ -56,27 +60,27 @@ class RBMNet:
         self.batchSize = DEFAULT_BATCHSIZE
         self.learnRate = tf.constant(DEFAULT_LEARNRATE, tf.float32)
 
-        self.notedata = tf.placeholder(tf.float32, [None, self.vNodes], name="notedata")
         self.wMatrix = tf.Variable(tf.random_normal([self.vNodes, self.hNodes], 0.01), name="wMatrix")
 
-        self.vBias = tf.Variable(tf.zeros([1, self.vNodes], tf.float32, name="vBias"))
-        self.hBias = tf.Variable(tf.zeros([1, self.hNodes], tf.float32, name="hBias"))
+        self.vBias = tf.Variable(tf.zeros([1, self.vNodes], tf.float32), name="vBias")
+        self.hBias = tf.Variable(tf.zeros([1, self.hNodes], tf.float32), name="hBias")
 
+        self.notedata = tf.placeholder(tf.float32, [None, self.vNodes])
         self.note_sample = Gibbs(k=1, x=self.notedata, wMatrix=self.wMatrix,
-                            hBias=self.hBias, vBias=self.vBias)
+                                 hBias=self.hBias, vBias=self.vBias)
 
         self.hdata = ProbSample(tf.sigmoid(tf.matmul(self.notedata, self.wMatrix) + self.hBias))
         self.h_sample = ProbSample(tf.sigmoid(tf.matmul(self.note_sample, self.wMatrix) + self.hBias))
 
         self.elemShape = tf.cast(tf.shape(self.notedata)[0], tf.float32)
         self.wAdjust = tf.multiply(self.learnRate / self.elemShape,
-                              tf.subtract(tf.matmul(tf.transpose(self.notedata), self.hdata),
-                                          tf.matmul(tf.transpose(self.note_sample), self.h_sample)))
+                                   tf.subtract(tf.matmul(tf.transpose(self.notedata), self.hdata),
+                                               tf.matmul(tf.transpose(self.note_sample), self.h_sample)))
 
         self.vBAdjust = tf.multiply(self.learnRate / self.elemShape,
-                               tf.reduce_sum(tf.subtract(self.notedata, self.note_sample), 0, True))
+                                    tf.reduce_sum(tf.subtract(self.notedata, self.note_sample), 0, True))
         self.hBAdjust = tf.multiply(self.learnRate / self.elemShape,
-                               tf.reduce_sum(tf.subtract(self.hdata, self.h_sample), 0, True))
+                                    tf.reduce_sum(tf.subtract(self.hdata, self.h_sample), 0, True))
 
         self.trainUpdate = [self.wMatrix.assign_add(self.wAdjust),
                             self.vBias.assign_add(self.vBAdjust),
@@ -84,11 +88,12 @@ class RBMNet:
 
     def LoadTrainingSet(self, directory):
 
+        self.trainDataset = []
+
         if directory is None:
             print("Can't load training data - no valid directory specified!")
             return
 
-        self.trainDataset = []
         fileset = glob.glob("{}/*.mid*".format(directory))
 
         for midifile in tqdm(fileset):
@@ -110,18 +115,21 @@ class RBMNet:
             print("Can't train without any data!")
             return
 
-        modelSaveLoc = MODEL_LOC
+        modelSaveLoc = MODEL_SAVE_LOC
 
-        if os.path.isdir(saveDir):
-            modelSaveLoc = saveDir + "\\rbmnet.chkpt"
+        if saveDir is not None and saveDir and os.path.isdir(saveDir) and os.listdir(saveDir) == []:
+            modelSaveLoc = saveDir
+            os.rmdir(saveDir)
             print("Model will be saved to " + modelSaveLoc)
+        else:
+            shutil.rmtree(MODEL_SAVE_LOC)
+
+        netBuilder = tf.saved_model.builder.SavedModelBuilder(modelSaveLoc)
 
         with tf.Session() as session:
 
             init = tf.global_variables_initializer()
             session.run(init)
-
-            netSaver = tf.train.Saver(tf.global_variables())
 
             for epoch in tqdm(range(self.epochs)):
 
@@ -134,37 +142,52 @@ class RBMNet:
                         tr_x = tData[i:i + self.batchSize]
                         session.run(self.trainUpdate, feed_dict={self.notedata: tr_x})
 
-            netSaver.save(session, modelSaveLoc)
-            netSaver.save(session, MODEL_LOC)
-            self.trained = True
+            netBuilder.add_meta_graph_and_variables(session, ["RBMNet"])
 
+        netBuilder.save()
+        print("Model stored in " + modelSaveLoc)
         return
 
     def Generate(self, event, loadDir, saveDir):
 
         sampleSaveLoc = SAMPLE_LOC
 
-        if os.path.isdir(saveDir):
+        if saveDir is not None and saveDir and os.path.isdir(saveDir):
             sampleSaveLoc = saveDir
 
-        modelLoadLoc = MODEL_LOC
-        modelLoadCheck = MODEL_LOC_CHECK
+        modelLoadLoc = MODEL_SAVE_LOC
 
-        if os.path.isdir(loadDir):
-            modelLoadLoc = loadDir + "\\rbmnet.chkpt"
-            modelLoadCheck = modelLoadLoc + ".index"
+        if loadDir is not None and loadDir and os.path.isdir(loadDir):
+            modelLoadLoc = loadDir
 
+        modelLoadCheck = modelLoadLoc + "/saved_model.pb"
 
         if not os.path.isfile(modelLoadCheck):
             print("Can't generate with no network available!")
             return
 
         print("Loading model from " + modelLoadLoc + "...")
+        tf.reset_default_graph()
 
         with tf.Session() as session:
+            session.run(tf.global_variables_initializer())
 
-            netLoader = tf.train.Saver()
-            netLoader.restore(session, modelLoadLoc)
+            tf.saved_model.loader.load(session, ["RBMNet"], modelLoadLoc)
+
+            for v in tf.global_variables():
+                if "wMatrix" in v.name:
+                    self.wMatrix = v
+                elif "vBias" in v.name:
+                    self.vBias = v
+                elif "hBias" in v.name:
+                    self.hBias = v
+                elif "timesteps" in v.name:
+                    self.tfTimesteps = v
+
+            self.timesteps = session.run(self.tfTimesteps)
+            self.vNodes = 2 * self.notespan * self.timesteps
+
+            self.notedata = tf.placeholder(tf.float32, [None, self.vNodes])
 
             sample = Gibbs(k=1, x=self.notedata, wMatrix=self.wMatrix, hBias=self.hBias, vBias=self.vBias).eval(
                 session=session, feed_dict={self.notedata: num.zeros((self.genSample, self.vNodes))})
@@ -172,8 +195,32 @@ class RBMNet:
                 if not any(sample[i, :]):
                     continue
                 S = num.reshape(sample[i, :], (self.timesteps, 2 * self.notespan))
-                self.midi.FVtoMIDI(S, sampleSaveLoc + "\\OutputSample-{}".format(i))
+                self.midi.FVtoMIDI(S, sampleSaveLoc + "/OutputSample-{}".format(i))
 
         print("Saved samples to " + sampleSaveLoc)
 
         return
+
+    def SaveModel(self, event, saveDir):
+
+        if not (saveDir is not None and saveDir and os.path.isdir(saveDir)):
+            print("Invalid model save directory specified!")
+            return
+
+        modelLoadLoc = MODEL_LOC
+        modelLoadCheck = MODEL_LOC_CHECK
+
+        if not os.path.isfile(modelLoadCheck):
+            print("Can't save if no network has been trained!")
+            return
+
+        modelSaveLoc = saveDir + "/rbmnet.chkpt"
+
+        with tf.Session() as session:
+
+            netIO = tf.train.Saver()
+            netIO.restore(session, modelLoadLoc)
+
+            netIO.save(session, modelSaveLoc)
+
+        print("Saved model to " + modelSaveLoc)

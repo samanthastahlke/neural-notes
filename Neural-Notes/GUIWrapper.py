@@ -133,11 +133,6 @@ class MainUI:
         self.btnTrain.pack(pady=PADDING)
         self.btnTrain.bind("<ButtonRelease-1>", self.GoTrain)
 
-        self.btnLoadModel = tk.Button(self.mainContainer,
-                                      text="Load Model...")
-        configUIButton(self.btnLoadModel)
-        self.btnLoadModel.pack(pady=PADDING)
-
         self.btnSaveModel = tk.Button(self.mainContainer,
                                       text="Save Current Model...")
         configUIButton(self.btnSaveModel)
@@ -171,9 +166,18 @@ class MainUI:
         row += 1
 
         self.tLblStatus = tk.Label(self.trainContainer,
-                                text="STATUS: ---")
+                                text="STATUS: ")
         configUILabel(self.tLblStatus)
         self.tLblStatus.grid(row=row,column=col,sticky=tk.W,padx=PADDING*2)
+
+        col += 1
+
+        self.tLblStatusMsg = tk.Label(self.trainContainer,
+                                      text="---",
+                                      wraplength=400,
+                                      justify=tk.LEFT)
+        configUILabel(self.tLblStatusMsg)
+        self.tLblStatusMsg.grid(row=row,column=col,sticky=tk.W)
 
         row += 1
         col = 0
@@ -303,11 +307,21 @@ class MainUI:
         row += 1
 
         self.gLblStatus = tk.Label(self.genContainer,
-                                   text="STATUS: ---")
+                                   text="STATUS: ")
         configUILabel(self.gLblStatus)
         self.gLblStatus.grid(row=row,column=col,sticky=tk.W,padx=PADDING*2)
 
+        col += 1
+
+        self.gLblStatusMsg = tk.Label(self.genContainer,
+                                      text="---",
+                                      wraplength=400,
+                                      justify=tk.LEFT)
+        configUILabel(self.gLblStatusMsg)
+        self.gLblStatusMsg.grid(row=row,column=col,sticky=tk.W)
+
         row += 1
+        col = 0
 
         self.gBtnChooseModel = tk.Button(self.genContainer,
                                         text="Load Model...")
@@ -378,6 +392,12 @@ class MainUI:
         self.gBtnGen.grid(row=row,column=col,sticky="se",pady=PADDING*2,padx=PADDING*2)
 
         self.mainContainer.tkraise()
+
+    def SetTrainStatus(self, msg):
+        self.tLblStatusMsg.configure(text=msg)
+
+    def SetGenStatus(self, msg):
+        self.gLblStatusMsg.configure(text=msg)
 
     def GoMain(self, event):
         self.mainContainer.tkraise()
