@@ -2,23 +2,28 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="caee319f-3794-4651-9229-4cc688bc4ca1" name="Default" comment="">
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
       <change beforePath="$PROJECT_DIR$/GUIWrapper.py" afterPath="$PROJECT_DIR$/GUIWrapper.py" />
       <change beforePath="$PROJECT_DIR$/NeuralNotes.py" afterPath="$PROJECT_DIR$/NeuralNotes.py" />
       <change beforePath="$PROJECT_DIR$/RBMNet.py" afterPath="$PROJECT_DIR$/RBMNet.py" />
-      <change beforePath="$PROJECT_DIR$/data/tmp_model/checkpoint" afterPath="" />
-      <change beforePath="$PROJECT_DIR$/data/tmp_model/rbmnet.chkpt.data-00000-of-00001" afterPath="" />
-      <change beforePath="$PROJECT_DIR$/data/tmp_model/rbmnet.chkpt.index" afterPath="" />
-      <change beforePath="$PROJECT_DIR$/data/tmp_model/rbmnet.chkpt.meta" afterPath="" />
+      <change beforePath="$PROJECT_DIR$/data/tmp_model/saved_model.pb" afterPath="$PROJECT_DIR$/data/tmp_model/saved_model.pb" />
+      <change beforePath="$PROJECT_DIR$/data/tmp_model/variables/variables.data-00000-of-00001" afterPath="$PROJECT_DIR$/data/tmp_model/variables/variables.data-00000-of-00001" />
+      <change beforePath="$PROJECT_DIR$/data/tmp_model/variables/variables.index" afterPath="$PROJECT_DIR$/data/tmp_model/variables/variables.index" />
       <change beforePath="$PROJECT_DIR$/gen/OutputSample-0.midi" afterPath="$PROJECT_DIR$/gen/OutputSample-0.midi" />
       <change beforePath="$PROJECT_DIR$/gen/OutputSample-1.midi" afterPath="$PROJECT_DIR$/gen/OutputSample-1.midi" />
       <change beforePath="$PROJECT_DIR$/gen/OutputSample-2.midi" afterPath="$PROJECT_DIR$/gen/OutputSample-2.midi" />
       <change beforePath="$PROJECT_DIR$/gen/OutputSample-3.midi" afterPath="$PROJECT_DIR$/gen/OutputSample-3.midi" />
       <change beforePath="$PROJECT_DIR$/gen/OutputSample-4.midi" afterPath="$PROJECT_DIR$/gen/OutputSample-4.midi" />
-      <change beforePath="$PROJECT_DIR$/models/pkmn/checkpoint" afterPath="" />
-      <change beforePath="$PROJECT_DIR$/models/pkmn/rbmnet.chkpt.data-00000-of-00001" afterPath="" />
-      <change beforePath="$PROJECT_DIR$/models/pkmn/rbmnet.chkpt.index" afterPath="" />
-      <change beforePath="$PROJECT_DIR$/models/pkmn/rbmnet.chkpt.meta" afterPath="" />
+      <change beforePath="$PROJECT_DIR$/models/animals/saved_model.pb" afterPath="" />
+      <change beforePath="$PROJECT_DIR$/models/animals/variables/variables.data-00000-of-00001" afterPath="" />
+      <change beforePath="$PROJECT_DIR$/models/animals/variables/variables.index" afterPath="" />
+      <change beforePath="$PROJECT_DIR$/models/pkmn/saved_model.pb" afterPath="$PROJECT_DIR$/models/pkmn/saved_model.pb" />
+      <change beforePath="$PROJECT_DIR$/models/pkmn/variables/variables.data-00000-of-00001" afterPath="$PROJECT_DIR$/models/pkmn/variables/variables.data-00000-of-00001" />
+      <change beforePath="$PROJECT_DIR$/models/pkmn/variables/variables.index" afterPath="$PROJECT_DIR$/models/pkmn/variables/variables.index" />
+      <change beforePath="$PROJECT_DIR$/sampleout/OutputSample-0.midi" afterPath="$PROJECT_DIR$/sampleout/OutputSample-0.midi" />
+      <change beforePath="$PROJECT_DIR$/sampleout/OutputSample-1.midi" afterPath="$PROJECT_DIR$/sampleout/OutputSample-1.midi" />
+      <change beforePath="$PROJECT_DIR$/sampleout/OutputSample-2.midi" afterPath="$PROJECT_DIR$/sampleout/OutputSample-2.midi" />
+      <change beforePath="$PROJECT_DIR$/sampleout/OutputSample-3.midi" afterPath="$PROJECT_DIR$/sampleout/OutputSample-3.midi" />
+      <change beforePath="$PROJECT_DIR$/sampleout/OutputSample-4.midi" afterPath="$PROJECT_DIR$/sampleout/OutputSample-4.midi" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="TRACKING_ENABLED" value="true" />
@@ -32,8 +37,8 @@
       <file leaf-file-name="NeuralNotes.py" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/NeuralNotes.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="230">
-              <caret line="120" column="56" lean-forward="false" selection-start-line="120" selection-start-column="56" selection-end-line="120" selection-end-column="56" />
+            <state relative-caret-position="298">
+              <caret line="117" column="84" lean-forward="false" selection-start-line="117" selection-start-column="84" selection-end-line="117" selection-end-column="84" />
               <folding>
                 <element signature="e#0#20#0" expanded="true" />
               </folding>
@@ -53,25 +58,24 @@
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="RBMNet.py" pinned="false" current-in-tab="true">
+      <file leaf-file-name="RBMNet.py" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/RBMNet.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="376">
-              <caret line="191" column="112" lean-forward="true" selection-start-line="191" selection-start-column="112" selection-end-line="191" selection-end-column="112" />
+            <state relative-caret-position="-1363">
+              <caret line="109" column="19" lean-forward="false" selection-start-line="109" selection-start-column="19" selection-end-line="109" selection-end-column="19" />
               <folding>
                 <element signature="e#0#23#0" expanded="true" />
                 <element signature="e#655#712#0" expanded="false" />
-                <element signature="e#3609#4207#0" expanded="false" />
               </folding>
             </state>
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="GUIWrapper.py" pinned="false" current-in-tab="false">
+      <file leaf-file-name="GUIWrapper.py" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/GUIWrapper.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="396">
-              <caret line="141" column="56" lean-forward="false" selection-start-line="141" selection-start-column="56" selection-end-line="141" selection-end-column="56" />
+            <state relative-caret-position="340">
+              <caret line="20" column="45" lean-forward="true" selection-start-line="20" selection-start-column="45" selection-end-line="20" selection-end-column="45" />
               <folding>
                 <element signature="e#0#20#0" expanded="true" />
               </folding>
@@ -107,9 +111,9 @@
     <option name="CHANGED_PATHS">
       <list>
         <option value="$PROJECT_DIR$/MidiWrapper.py" />
+        <option value="$PROJECT_DIR$/RBMNet.py" />
         <option value="$PROJECT_DIR$/GUIWrapper.py" />
         <option value="$PROJECT_DIR$/NeuralNotes.py" />
-        <option value="$PROJECT_DIR$/RBMNet.py" />
       </list>
     </option>
   </component>
@@ -235,7 +239,7 @@
       <window_info id="Structure" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.25" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
       <window_info id="Terminal" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.20326087" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
       <window_info id="Favorites" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="2" side_tool="true" content_ui="tabs" />
-      <window_info id="Debug" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.39872748" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
+      <window_info id="Debug" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.32934782" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
       <window_info id="Cvs" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.25" sideWeight="0.5" order="4" side_tool="false" content_ui="tabs" />
       <window_info id="Message" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="0" side_tool="false" content_ui="tabs" />
       <window_info id="Commander" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.4" sideWeight="0.5" order="0" side_tool="false" content_ui="tabs" />
@@ -301,7 +305,6 @@
           <folding>
             <element signature="e#0#23#0" expanded="true" />
             <element signature="e#655#712#0" expanded="false" />
-            <element signature="e#3609#4207#0" expanded="false" />
           </folding>
         </state>
       </provider>
@@ -353,7 +356,6 @@
           <folding>
             <element signature="e#0#23#0" expanded="true" />
             <element signature="e#655#712#0" expanded="false" />
-            <element signature="e#3609#4207#0" expanded="false" />
           </folding>
         </state>
       </provider>
@@ -385,7 +387,6 @@
           <folding>
             <element signature="e#0#23#0" expanded="true" />
             <element signature="e#655#712#0" expanded="false" />
-            <element signature="e#3609#4207#0" expanded="false" />
           </folding>
         </state>
       </provider>
@@ -427,7 +428,6 @@
           <folding>
             <element signature="e#0#23#0" expanded="true" />
             <element signature="e#655#712#0" expanded="false" />
-            <element signature="e#3609#4207#0" expanded="false" />
           </folding>
         </state>
       </provider>
@@ -479,7 +479,6 @@
           <folding>
             <element signature="e#0#23#0" expanded="true" />
             <element signature="e#655#712#0" expanded="false" />
-            <element signature="e#3609#4207#0" expanded="false" />
           </folding>
         </state>
       </provider>
@@ -514,20 +513,10 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/GUIWrapper.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="396">
-          <caret line="141" column="56" lean-forward="false" selection-start-line="141" selection-start-column="56" selection-end-line="141" selection-end-column="56" />
-          <folding>
-            <element signature="e#0#20#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/NeuralNotes.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="230">
-          <caret line="120" column="56" lean-forward="false" selection-start-line="120" selection-start-column="56" selection-end-line="120" selection-end-column="56" />
+        <state relative-caret-position="298">
+          <caret line="117" column="84" lean-forward="false" selection-start-line="117" selection-start-column="84" selection-end-line="117" selection-end-column="84" />
           <folding>
             <element signature="e#0#20#0" expanded="true" />
           </folding>
@@ -536,12 +525,21 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/RBMNet.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="376">
-          <caret line="191" column="112" lean-forward="true" selection-start-line="191" selection-start-column="112" selection-end-line="191" selection-end-column="112" />
+        <state relative-caret-position="-1363">
+          <caret line="109" column="19" lean-forward="false" selection-start-line="109" selection-start-column="19" selection-end-line="109" selection-end-column="19" />
           <folding>
             <element signature="e#0#23#0" expanded="true" />
             <element signature="e#655#712#0" expanded="false" />
-            <element signature="e#3609#4207#0" expanded="false" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/GUIWrapper.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="340">
+          <caret line="20" column="45" lean-forward="true" selection-start-line="20" selection-start-column="45" selection-end-line="20" selection-end-column="45" />
+          <folding>
+            <element signature="e#0#20#0" expanded="true" />
           </folding>
         </state>
       </provider>

@@ -133,11 +133,6 @@ class MainUI:
         self.btnTrain.pack(pady=PADDING)
         self.btnTrain.bind("<ButtonRelease-1>", self.GoTrain)
 
-        self.btnSaveModel = tk.Button(self.mainContainer,
-                                      text="Save Current Model...")
-        configUIButton(self.btnSaveModel)
-        self.btnSaveModel.pack(pady=PADDING)
-
         self.btnGenerate = tk.Button(self.mainContainer,
                                      text="Generate...")
         configUIButton(self.btnGenerate)
@@ -166,21 +161,13 @@ class MainUI:
         row += 1
 
         self.tLblStatus = tk.Label(self.trainContainer,
-                                text="STATUS: ")
+                                text="STATUS: ---",
+                                wraplength=400,
+                                justify=tk.LEFT)
         configUILabel(self.tLblStatus)
         self.tLblStatus.grid(row=row,column=col,sticky=tk.W,padx=PADDING*2)
 
-        col += 1
-
-        self.tLblStatusMsg = tk.Label(self.trainContainer,
-                                      text="---",
-                                      wraplength=400,
-                                      justify=tk.LEFT)
-        configUILabel(self.tLblStatusMsg)
-        self.tLblStatusMsg.grid(row=row,column=col,sticky=tk.W)
-
         row += 1
-        col = 0
 
         self.tBtnChooseData = tk.Button(self.trainContainer,
                                         text="Choose training folder...")
@@ -253,21 +240,14 @@ class MainUI:
         row += 1
         col = 0
 
-        self.saveModel = False
+        self.saveModel = tk.IntVar()
         self.tTogSave = tk.Checkbutton(self.trainContainer,
                                        var=self.saveModel,
-                                       text="Save model to ")
+                                       text="Save model to ---",
+                                       wraplength=400,
+                                       justify=tk.LEFT)
         configUIToggle(self.tTogSave)
         self.tTogSave.grid(row=row,column=col,sticky=tk.W,pady=PADDING,padx=PADDING)
-
-        col += 1
-
-        self.tLblSave = tk.Label(self.trainContainer,
-                                 text="---",
-                                 wraplength=400,
-                                 justify=tk.LEFT)
-        configUILabel(self.tLblSave)
-        self.tLblSave.grid(row=row,column=col,sticky=tk.W,pady=PADDING,padx=PADDING)
 
         row += 1
         col = 0
@@ -307,21 +287,13 @@ class MainUI:
         row += 1
 
         self.gLblStatus = tk.Label(self.genContainer,
-                                   text="STATUS: ")
+                                   text="STATUS: ---",
+                                   wraplength=400,
+                                   justify=tk.LEFT)
         configUILabel(self.gLblStatus)
         self.gLblStatus.grid(row=row,column=col,sticky=tk.W,padx=PADDING*2)
 
-        col += 1
-
-        self.gLblStatusMsg = tk.Label(self.genContainer,
-                                      text="---",
-                                      wraplength=400,
-                                      justify=tk.LEFT)
-        configUILabel(self.gLblStatusMsg)
-        self.gLblStatusMsg.grid(row=row,column=col,sticky=tk.W)
-
         row += 1
-        col = 0
 
         self.gBtnChooseModel = tk.Button(self.genContainer,
                                         text="Load Model...")
@@ -394,10 +366,12 @@ class MainUI:
         self.mainContainer.tkraise()
 
     def SetTrainStatus(self, msg):
-        self.tLblStatusMsg.configure(text=msg)
+        self.tLblStatus.configure(text="STATUS: " + msg)
+        self.tLblStatus.update()
 
     def SetGenStatus(self, msg):
-        self.gLblStatusMsg.configure(text=msg)
+        self.gLblStatus.configure(text="STATUS: " + msg)
+        self.gLblStatus.update()
 
     def GoMain(self, event):
         self.mainContainer.tkraise()

@@ -19,8 +19,9 @@ def WindowCloseCallback():
     return
 
 def LoadTrainingSet(event):
-    #Confirm the number of timesteps.
+    mainUI.SetTrainStatus("Loading dataset...")
 
+    #Confirm the number of timesteps.
     try:
         tmpTimesteps = int(mainUI.tTxtTimesteps.get())
         rbm.DEFAULT_TIMESTEPS = tmpTimesteps
@@ -28,17 +29,19 @@ def LoadTrainingSet(event):
         mainUI.tTxtTimesteps.delete(0, 'end')
         mainUI.tTxtTimesteps.insert(0, rbm.DEFAULT_TIMESTEPS)
 
-    rbmNet.LoadTrainingSet(appData.trainDataDirectory)
+    loadSuccess = rbmNet.LoadTrainingSet(appData.trainDataDirectory)
+    mainUI.SetTrainStatus("Dataset loaded" if loadSuccess else "Dataset loading failed")
+
     return
 
 def GetModelSaveDirectory(event):
     appData.GetModelSaveDirectory(event)
-    mainUI.tLblSave.configure(text=appData.modelSaveDirectory)
-    return
 
-def SaveModel(event):
-    GetModelSaveDirectory(event)
-    rbmNet.SaveModel(event, appData.modelSaveDirectory)
+    if appData.modelSaveDirectory is not None:
+        mainUI.tTogSave.configure(text="Save model to " + appData.modelSaveDirectory)
+    else:
+        mainUI.tTogSave.configure(text="Save model to ---")
+
     return
 
 def GetModelLoadDirectory(event):
@@ -47,12 +50,18 @@ def GetModelLoadDirectory(event):
 
 def GetSampleSaveDirectory(event):
     appData.GetSampleSaveDirectory(event)
-    mainUI.gLblSaveDir.configure(text="Saving samples to " + appData.sampleSaveDirectory)
+
+    if appData.sampleSaveDirectory is not None:
+        mainUI.gLblSaveDir.configure(text="Saving samples to " + appData.sampleSaveDirectory)
+    else:
+        mainUI.gLblSaveDir.configure(text="Saving samples to " + rbm.SAMPLE_LOC)
+
     return
 
 def TriggerGen(event):
-    #Extract info from our generation parameter fields.
+    mainUI.SetGenStatus("Generating samples...")
 
+    #Extract info from our generation parameter fields.
     try:
         tmpSamples = int(mainUI.gTxtSamples.get())
         rbmNet.genSample = tmpSamples
@@ -67,12 +76,14 @@ def TriggerGen(event):
         mainUI.gTxtTimescale.delete(0, 'end')
         mainUI.gTxtSamples.insert(0, midiUtil.tickScale)
 
-    rbmNet.Generate(event, appData.modelLoadDirectory, appData.sampleSaveDirectory)
+    genResult = rbmNet.Generate(event, appData.modelLoadDirectory, appData.sampleSaveDirectory)
+    mainUI.SetGenStatus("Finished generating samples" if genResult else "Sample generation failed")
     return
 
 def TriggerTrain(event):
-    #Extract info from our training parameter fields.
+    mainUI.SetTrainStatus("Training...")
 
+    #Extract info from our training parameter fields.
     try:
         tmpEpochs = int(mainUI.tTxtEpochs.get())
         rbm.DEFAULT_EPOCHS = tmpEpochs
@@ -104,12 +115,16 @@ def TriggerTrain(event):
         mainUI.tTxtNodes.insert(0, rbm.DEFAULT_HNODES)
 
     rbmNet.InitNNParameters()
-    rbmNet.Train(event, appData.modelSaveDirectory)
+    trainResult = rbmNet.Train(event, appData.modelSaveDirectory if mainUI.saveModel.get() else None)
+    mainUI.SetTrainStatus("Training complete" if trainResult else "Training failed")
+
+    if trainResult:
+        mainUI.SetGenStatus("Ready")
+
     return
 
 #Setup global Tkinter handlers.
 mainUI.tkRoot.protocol("WM_DELETE_WINDOW", WindowCloseCallback)
-mainUI.btnSaveModel.bind("<ButtonRelease-1>", SaveModel)
 mainUI.tBtnChooseData.bind("<ButtonRelease-1>", appData.GetTrainDirectory)
 mainUI.tBtnLoadData.bind("<ButtonRelease-1>", LoadTrainingSet)
 mainUI.tBtnChooseSave.bind("<ButtonRelease-1>", GetModelSaveDirectory)
@@ -117,9 +132,6 @@ mainUI.tBtnTrain.bind("<ButtonRelease-1>", TriggerTrain)
 mainUI.gBtnChooseModel.bind("<ButtonRelease-1>", GetModelLoadDirectory)
 mainUI.gBtnChooseSave.bind("<ButtonRelease-1>", GetSampleSaveDirectory)
 mainUI.gBtnGen.bind("<ButtonRelease-1>", TriggerGen)
-
-#mainUI.btnTrain.bind("<ButtonRelease-1>", rbmNet.Train)
-#mainUI.btnGenerate.bind("<ButtonRelease-1>", rbmNet.Generate)
 
 #Initialize Tkinter UI labels/elements.
 #Training/model parameters.
@@ -137,6 +149,11 @@ mainUI.gTxtTimescale.delete(0, 'end')
 mainUI.gTxtTimescale.insert(0, midiUtil.tickScale)
 mainUI.gTxtSamples.delete(0, 'end')
 mainUI.gTxtSamples.insert(0, rbmNet.genSample)
+mainUI.gLblSaveDir.configure(text="Saving samples to " + rbm.SAMPLE_LOC)
+
+#Status messages.
+mainUI.SetTrainStatus("No data available")
+mainUI.SetGenStatus("Ready" if rbmNet.IsTmpModelStored() else "No model available")
 
 #Main loop.
 def AppMain():

@@ -92,7 +92,7 @@ class RBMNet:
 
         if directory is None:
             print("Can't load training data - no valid directory specified!")
-            return
+            return False
 
         fileset = glob.glob("{}/*.mid*".format(directory))
 
@@ -107,24 +107,28 @@ class RBMNet:
 
         print("Loaded {} MIDI files for training.".format(len(self.trainDataset)))
 
-        return
+        return True
 
     def Train(self, event, saveDir):
 
         if not len(self.trainDataset) > 0:
             print("Can't train without any data!")
-            return
+            return False
 
         modelSaveLoc = MODEL_SAVE_LOC
+        saveTmp = False
 
         if saveDir is not None and saveDir and os.path.isdir(saveDir) and os.listdir(saveDir) == []:
             modelSaveLoc = saveDir
             os.rmdir(saveDir)
+            saveTmp = True
             print("Model will be saved to " + modelSaveLoc)
-        else:
-            shutil.rmtree(MODEL_SAVE_LOC)
 
+        shutil.rmtree(MODEL_SAVE_LOC)
         netBuilder = tf.saved_model.builder.SavedModelBuilder(modelSaveLoc)
+
+        if saveTmp:
+            tmpNetBuilder = tf.saved_model.builder.SavedModelBuilder(MODEL_SAVE_LOC)
 
         with tf.Session() as session:
 
@@ -144,9 +148,20 @@ class RBMNet:
 
             netBuilder.add_meta_graph_and_variables(session, ["RBMNet"])
 
+            if saveTmp:
+                tmpNetBuilder.add_meta_graph_and_variables(session, ["RBMNet"])
+
         netBuilder.save()
+
+        if saveTmp:
+            tmpNetBuilder.save()
+
         print("Model stored in " + modelSaveLoc)
-        return
+        return True
+
+    def IsTmpModelStored(self):
+        modelLoadCheck = MODEL_SAVE_LOC + "/saved_model.pb"
+        return os.path.isfile(modelLoadCheck)
 
     def Generate(self, event, loadDir, saveDir):
 
@@ -164,14 +179,14 @@ class RBMNet:
 
         if not os.path.isfile(modelLoadCheck):
             print("Can't generate with no network available!")
-            return
+            return False
 
         print("Loading model from " + modelLoadLoc + "...")
         tf.reset_default_graph()
 
         with tf.Session() as session:
-            session.run(tf.global_variables_initializer())
 
+            session.run(tf.global_variables_initializer())
             tf.saved_model.loader.load(session, ["RBMNet"], modelLoadLoc)
 
             for v in tf.global_variables():
@@ -199,28 +214,4 @@ class RBMNet:
 
         print("Saved samples to " + sampleSaveLoc)
 
-        return
-
-    def SaveModel(self, event, saveDir):
-
-        if not (saveDir is not None and saveDir and os.path.isdir(saveDir)):
-            print("Invalid model save directory specified!")
-            return
-
-        modelLoadLoc = MODEL_LOC
-        modelLoadCheck = MODEL_LOC_CHECK
-
-        if not os.path.isfile(modelLoadCheck):
-            print("Can't save if no network has been trained!")
-            return
-
-        modelSaveLoc = saveDir + "/rbmnet.chkpt"
-
-        with tf.Session() as session:
-
-            netIO = tf.train.Saver()
-            netIO.restore(session, modelLoadLoc)
-
-            netIO.save(session, modelSaveLoc)
-
-        print("Saved model to " + modelSaveLoc)
+        return True
