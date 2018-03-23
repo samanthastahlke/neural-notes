@@ -33,7 +33,7 @@ def LoadTrainingSet(event):
 
 def GetModelSaveDirectory(event):
     appData.GetModelSaveDirectory(event)
-    mainUI.tLblSave.configure(appData.modelSaveDirectory)
+    mainUI.tLblSave.configure(text=appData.modelSaveDirectory)
     return
 
 def GetModelLoadDirectory(event):
@@ -62,7 +62,7 @@ def TriggerGen(event):
         mainUI.gTxtTimescale.delete(0, 'end')
         mainUI.gTxtSamples.insert(0, midiUtil.tickScale)
 
-    rbmNet.Generate(event)
+    rbmNet.Generate(event, appData.modelLoadDirectory, appData.sampleSaveDirectory)
     return
 
 def TriggerTrain(event):
@@ -99,7 +99,7 @@ def TriggerTrain(event):
         mainUI.tTxtNodes.insert(0, rbm.DEFAULT_HNODES)
 
     rbmNet.InitNNParameters()
-    rbmNet.Train(event)
+    rbmNet.Train(event, appData.modelSaveDirectory)
     return
 
 #Setup global Tkinter handlers.

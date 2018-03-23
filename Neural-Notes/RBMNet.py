@@ -5,8 +5,9 @@ from tqdm import tqdm
 import numpy as num
 import os
 
-MODEL_LOC = os.path.dirname(os.path.realpath(__file__)) + '/models/rbmnet.chkpt'
-MODEL_LOC_CHECK = os.path.dirname(os.path.realpath(__file__)) + '/models/rbmnet.chkpt.index'
+MODEL_LOC = os.path.dirname(os.path.realpath(__file__)) + '/data/tmp_model/rbmnet.chkpt'
+MODEL_LOC_CHECK = os.path.dirname(os.path.realpath(__file__)) + '/data/tmp_model/rbmnet.chkpt.index'
+SAMPLE_LOC = os.path.dirname(os.path.realpath(__file__)) + '/sampleout'
 
 DEFAULT_TIMESTEPS = 48
 DEFAULT_HNODES = 50
@@ -17,7 +18,6 @@ DEFAULT_SAMPLES = 5
 
 def ProbSample(p):
     return tf.floor(p + tf.random_uniform(tf.shape(p), 0, 1))
-
 
 def Gibbs(k, x, wMatrix, hBias, vBias):
 
@@ -104,11 +104,17 @@ class RBMNet:
 
         return
 
-    def Train(self, event):
+    def Train(self, event, saveDir):
 
         if not len(self.trainDataset) > 0:
             print("Can't train without any data!")
             return
+
+        modelSaveLoc = MODEL_LOC
+
+        if os.path.isdir(saveDir):
+            modelSaveLoc = saveDir + "\\rbmnet.chkpt"
+            print("Model will be saved to " + modelSaveLoc)
 
         with tf.Session() as session:
 
@@ -128,21 +134,37 @@ class RBMNet:
                         tr_x = tData[i:i + self.batchSize]
                         session.run(self.trainUpdate, feed_dict={self.notedata: tr_x})
 
+            netSaver.save(session, modelSaveLoc)
             netSaver.save(session, MODEL_LOC)
             self.trained = True
 
         return
 
-    def Generate(self, event):
+    def Generate(self, event, loadDir, saveDir):
 
-        if not (self.trained or os.path.isfile(MODEL_LOC_CHECK)):
-            print("Can't generate on an untrained network!")
+        sampleSaveLoc = SAMPLE_LOC
+
+        if os.path.isdir(saveDir):
+            sampleSaveLoc = saveDir
+
+        modelLoadLoc = MODEL_LOC
+        modelLoadCheck = MODEL_LOC_CHECK
+
+        if os.path.isdir(loadDir):
+            modelLoadLoc = loadDir + "\\rbmnet.chkpt"
+            modelLoadCheck = modelLoadLoc + ".index"
+
+
+        if not os.path.isfile(modelLoadCheck):
+            print("Can't generate with no network available!")
             return
+
+        print("Loading model from " + modelLoadLoc + "...")
 
         with tf.Session() as session:
 
             netLoader = tf.train.Saver()
-            netLoader.restore(session, MODEL_LOC)
+            netLoader.restore(session, modelLoadLoc)
 
             sample = Gibbs(k=1, x=self.notedata, wMatrix=self.wMatrix, hBias=self.hBias, vBias=self.vBias).eval(
                 session=session, feed_dict={self.notedata: num.zeros((self.genSample, self.vNodes))})
@@ -150,6 +172,8 @@ class RBMNet:
                 if not any(sample[i, :]):
                     continue
                 S = num.reshape(sample[i, :], (self.timesteps, 2 * self.notespan))
-                self.midi.FVtoMIDI(S, os.path.abspath(os.curdir) + "\\OutputSample-{}".format(i))
+                self.midi.FVtoMIDI(S, sampleSaveLoc + "\\OutputSample-{}".format(i))
+
+        print("Saved samples to " + sampleSaveLoc)
 
         return

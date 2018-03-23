@@ -50,7 +50,7 @@ class AppData:
         self.modelLoadDirectory = ChooseDirectory("Select a folder containing a trained model...")
 
     def GetModelSaveDirectory(self, event):
-        self.modelSaveDirectory = filedialog.asksaveasfile(mode='w', defaultextension="")
+        self.modelSaveDirectory = ChooseDirectory("Select a folder to save the model...")
 
     def GetSampleSaveDirectory(self, event):
         self.sampleSaveDirectory = ChooseDirectory("Select an output folder...")
