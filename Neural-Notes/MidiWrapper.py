@@ -7,13 +7,15 @@ import numpy as num
 
 class NNMidiUtility:
 
-    def __init__(self, lowBound=36, highBound=85, maxLength=100):
+    def __init__(self, lowBound=36, highBound=85):
 
         #Establish the range of notes we'll consider in the model.
         self.lowBound = lowBound
         self.highBound = highBound
         self.notespan = highBound - lowBound
-        self.maxLength = maxLength
+        self.maxLength = 100
+        self.outputVelocity = 80
+        self.tickScale = 60
 
     def MIDItoFV(self, filename):
 
@@ -113,8 +115,6 @@ class NNMidiUtility:
         track = midi.Track()
         midiEvents.append(track)
 
-        testTickScale = 80
-
         lTime = 0
         prevState = [[0,0] for n in range(self.notespan)]
 
@@ -138,14 +138,14 @@ class NNMidiUtility:
 
             for note in notesOff:
 
-                track.append(midi.NoteOffEvent(tick = (fTime - lTime) * testTickScale,
+                track.append(midi.NoteOffEvent(tick = (fTime - lTime) * self.tickScale,
                                                pitch = note + self.lowBound))
                 lTime = fTime
 
             for note in notesOn:
 
-                track.append(midi.NoteOnEvent(tick = (fTime - lTime) * testTickScale,
-                                              velocity = 40,
+                track.append(midi.NoteOnEvent(tick = (fTime - lTime) * self.tickScale,
+                                              velocity = self.outputVelocity,
                                               pitch = note + self.lowBound))
                 lTime = fTime
 

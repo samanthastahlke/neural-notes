@@ -103,6 +103,7 @@ class MainUI:
 
         # Initialize Tkinter.
         self.tkRoot = tk.Tk()
+        self.tkRoot.title("Neural Notes")
         self.tkRoot.geometry("640x480")
         self.tkRoot.configure(bg=BG_COL,
                               highlightbackground=BG_COL,
@@ -132,15 +133,15 @@ class MainUI:
         self.btnTrain.pack(pady=PADDING)
         self.btnTrain.bind("<ButtonRelease-1>", self.GoTrain)
 
-        self.btnChooseTrainData = tk.Button(self.mainContainer,
-                                            text="Load Model...")
-        configUIButton(self.btnChooseTrainData)
-        self.btnChooseTrainData.pack(pady=PADDING)
+        self.btnLoadModel = tk.Button(self.mainContainer,
+                                      text="Load Model...")
+        configUIButton(self.btnLoadModel)
+        self.btnLoadModel.pack(pady=PADDING)
 
-        self.btnLoadTraining = tk.Button(self.mainContainer,
-                                         text="Save Current Model...")
-        configUIButton(self.btnLoadTraining)
-        self.btnLoadTraining.pack(pady=PADDING)
+        self.btnSaveModel = tk.Button(self.mainContainer,
+                                      text="Save Current Model...")
+        configUIButton(self.btnSaveModel)
+        self.btnSaveModel.pack(pady=PADDING)
 
         self.btnGenerate = tk.Button(self.mainContainer,
                                      text="Generate...")
@@ -258,7 +259,9 @@ class MainUI:
         col += 1
 
         self.tLblSave = tk.Label(self.trainContainer,
-                                 text="---")
+                                 text="---",
+                                 wraplength=400,
+                                 justify=tk.LEFT)
         configUILabel(self.tLblSave)
         self.tLblSave.grid(row=row,column=col,sticky=tk.W,pady=PADDING,padx=PADDING)
 
@@ -315,19 +318,31 @@ class MainUI:
 
         self.genContainer.rowconfigure(row,weight=1)
         self.genFieldsContainer = tk.Frame(self.genContainer,background=BG_COL)
-        self.genFieldsContainer.grid_configure(row=row,column=col,pady=PADDING*2,padx=PADDING*2)
+        self.genFieldsContainer.grid_configure(row=row,column=col,sticky=tk.W,pady=PADDING*2,padx=PADDING*2)
 
         fRow = 0
 
         self.gLblSamples = tk.Label(self.genFieldsContainer,
                                    text="Samples: ")
         configUILabel(self.gLblSamples)
-        self.gLblSamples.grid(row=fRow,column=0,pady=PADDING*2,padx=PADDING)
+        self.gLblSamples.grid(row=fRow,column=0,sticky=tk.E,pady=PADDING*2,padx=PADDING)
 
         self.gTxtSamples = tk.Entry(self.genFieldsContainer)
         configUIField(self.gTxtSamples)
-        self.gTxtSamples.grid(row=fRow,column=1,pady=PADDING*2,padx=PADDING)
+        self.gTxtSamples.grid(row=fRow,column=1,sticky=tk.W,pady=PADDING*2,padx=PADDING)
         self.gTxtSamples.insert(0, "---")
+
+        fRow += 1
+
+        self.gLblTimescale = tk.Label(self.genFieldsContainer,
+                                      text="MIDI Tick Scale: ")
+        configUILabel(self.gLblTimescale)
+        self.gLblTimescale.grid(row=fRow,column=0,sticky=tk.E,pady=PADDING*2,padx=PADDING)
+
+        self.gTxtTimescale = tk.Entry(self.genFieldsContainer)
+        configUIField(self.gTxtTimescale)
+        self.gTxtTimescale.grid(row=fRow,column=1,sticky=tk.W,pady=PADDING*2,padx=PADDING)
+        self.gTxtTimescale.insert(0, "---")
 
         row += 1
 
@@ -336,6 +351,15 @@ class MainUI:
                                         text="Choose sample save directory...")
         configUIButtonSquare(self.gBtnChooseSave)
         self.gBtnChooseSave.grid(row=row,column=col,sticky="sw",pady=PADDING,padx=PADDING*2)
+
+        row += 1
+
+        self.gLblSaveDir = tk.Label(self.genContainer,
+                                    text="Saving samples to ---",
+                                    wraplength=400,
+                                    justify=tk.LEFT)
+        configUILabel(self.gLblSaveDir)
+        self.gLblSaveDir.grid(row=row,column=col,sticky="sw",pady=PADDING,padx=PADDING*2)
 
         row += 1
 

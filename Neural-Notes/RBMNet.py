@@ -12,6 +12,7 @@ DEFAULT_HNODES = 50
 DEFAULT_EPOCHS = 75
 DEFAULT_BATCHSIZE = 100
 DEFAULT_LEARNRATE = 0.005
+DEFAULT_SAMPLES = 5
 
 def ProbSample(p):
     return tf.floor(p + tf.random_uniform(tf.shape(p), 0, 1))
@@ -37,7 +38,6 @@ class RBMNet:
         self.midi = midiUtil
         self.trainDataset = []
         self.trained = False
-
         self.InitNNParameters()
 
         os.environ['TF_CPP_MIN_LOG_LEVEL'] = '2'
@@ -46,6 +46,7 @@ class RBMNet:
     def InitNNParameters(self):
         self.notespan = self.midi.notespan
         self.timesteps = DEFAULT_TIMESTEPS
+        self.genSample = DEFAULT_SAMPLES
 
         self.vNodes = 2 * self.notespan * self.timesteps
         self.hNodes = DEFAULT_HNODES
@@ -89,7 +90,7 @@ class RBMNet:
         self.trainDataset = []
         fileset = glob.glob("{}/*.mid*".format(directory))
 
-        for midifile in fileset:
+        for midifile in tqdm(fileset):
             try:
                 fv = num.array(self.midi.MIDItoFV(midifile))
 
@@ -146,7 +147,7 @@ class RBMNet:
             netLoader.restore(session, MODEL_LOC)
 
             sample = Gibbs(k=1, x=self.notedata, wMatrix=self.wMatrix, hBias=self.hBias, vBias=self.vBias).eval(
-                session=session, feed_dict={self.notedata: num.zeros((5, self.vNodes))})
+                session=session, feed_dict={self.notedata: num.zeros((self.genSample, self.vNodes))})
             for i in range(sample.shape[0]):
                 if not any(sample[i, :]):
                     continue
@@ -154,4 +155,3 @@ class RBMNet:
                 self.midi.FVtoMIDI(S, os.path.abspath(os.curdir) + "\\Test-Out-{}".format(i))
 
         return
-
