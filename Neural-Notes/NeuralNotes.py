@@ -20,20 +20,24 @@ def WindowCloseCallback():
 
 def LoadTrainingSet(event):
     #Confirm the number of timesteps.
-    '''
+
     try:
         tmpTimesteps = int(mainUI.tTxtTimesteps.get())
         rbm.DEFAULT_TIMESTEPS = tmpTimesteps
     except Exception:
         mainUI.tTxtTimesteps.delete(0, 'end')
         mainUI.tTxtTimesteps.insert(0, rbm.DEFAULT_TIMESTEPS)
-    '''
+
     rbmNet.LoadTrainingSet(appData.trainDataDirectory)
     return
 
 def GetModelSaveDirectory(event):
     appData.GetModelSaveDirectory(event)
     mainUI.tLblSave.configure(appData.modelSaveDirectory)
+    return
+
+def GetModelLoadDirectory(event):
+    appData.GetModelLoadDirectory(event)
     return
 
 def GetSampleSaveDirectory(event):
@@ -43,13 +47,13 @@ def GetSampleSaveDirectory(event):
 
 def TriggerGen(event):
     #Extract info from our generation parameter fields.
-    '''
+
     try:
         tmpSamples = int(mainUI.gTxtSamples.get())
-        rbmNet.genSamples = tmpSamples
+        rbmNet.genSample = tmpSamples
     except Exception:
         mainUI.gTxtSamples.delete(0, 'end')
-        mainUI.gTxtSamples.insert(0, rbmNet.genSamples)
+        mainUI.gTxtSamples.insert(0, rbmNet.genSample)
 
     try:
         tmpTimescale = int(mainUI.gTxtTimescale.get())
@@ -57,22 +61,22 @@ def TriggerGen(event):
     except Exception:
         mainUI.gTxtTimescale.delete(0, 'end')
         mainUI.gTxtSamples.insert(0, midiUtil.tickScale)
-    '''
+
     rbmNet.Generate(event)
     return
 
 def TriggerTrain(event):
     #Extract info from our training parameter fields.
-    '''
+
     try:
-        tmpEpochs = int(mainUI.tTxtEpochs)
+        tmpEpochs = int(mainUI.tTxtEpochs.get())
         rbm.DEFAULT_EPOCHS = tmpEpochs
     except Exception:
         mainUI.tTxtEpochs.delete(0, 'end')
         mainUI.tTxtEpochs.insert(0, rbm.DEFAULT_EPOCHS)
 
     try:
-        tmpLearning = int(mainUI.tTxtLearn)
+        tmpLearning = int(mainUI.tTxtLearn.get())
         rbm.DEFAULT_LEARNRATE = tmpLearning
     except Exception:
         mainUI.tTxtLearn.delete(0, 'end')
@@ -95,18 +99,19 @@ def TriggerTrain(event):
         mainUI.tTxtNodes.insert(0, rbm.DEFAULT_HNODES)
 
     rbmNet.InitNNParameters()
-    '''
     rbmNet.Train(event)
     return
 
 #Setup global Tkinter handlers.
 mainUI.tkRoot.protocol("WM_DELETE_WINDOW", WindowCloseCallback)
+mainUI.btnLoadModel.bind("<ButtonRelease-1>", GetModelLoadDirectory)
+mainUI.btnSaveModel.bind("<ButtonRelease-1>", GetModelSaveDirectory)
 mainUI.tBtnChooseData.bind("<ButtonRelease-1>", appData.GetTrainDirectory)
 mainUI.tBtnLoadData.bind("<ButtonRelease-1>", LoadTrainingSet)
 mainUI.tBtnChooseSave.bind("<ButtonRelease-1>", GetModelSaveDirectory)
-mainUI.tBtnTrain.bind("<ButtonRelease-1>", rbmNet.Train)
+mainUI.tBtnTrain.bind("<ButtonRelease-1>", TriggerTrain)
 mainUI.gBtnChooseSave.bind("<ButtonRelease-1>", GetSampleSaveDirectory)
-mainUI.gBtnGen.bind("<ButtonRelease-1>", rbmNet.Generate)
+mainUI.gBtnGen.bind("<ButtonRelease-1>", TriggerGen)
 
 #mainUI.btnTrain.bind("<ButtonRelease-1>", rbmNet.Train)
 #mainUI.btnGenerate.bind("<ButtonRelease-1>", rbmNet.Generate)

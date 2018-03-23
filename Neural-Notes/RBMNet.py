@@ -7,6 +7,7 @@ import os
 
 MODEL_LOC = os.path.dirname(os.path.realpath(__file__)) + '/models/rbmnet.chkpt'
 MODEL_LOC_CHECK = os.path.dirname(os.path.realpath(__file__)) + '/models/rbmnet.chkpt.index'
+
 DEFAULT_TIMESTEPS = 48
 DEFAULT_HNODES = 50
 DEFAULT_EPOCHS = 75
@@ -101,9 +102,6 @@ class RBMNet:
 
         print("Loaded {} MIDI files for training.".format(len(self.trainDataset)))
 
-        if len(self.trainDataset) > 0:
-            self.midi.FVtoMIDI(self.trainDataset[0], os.path.abspath(os.curdir) + "\\Test-Converted")
-
         return
 
     def Train(self, event):
@@ -152,6 +150,6 @@ class RBMNet:
                 if not any(sample[i, :]):
                     continue
                 S = num.reshape(sample[i, :], (self.timesteps, 2 * self.notespan))
-                self.midi.FVtoMIDI(S, os.path.abspath(os.curdir) + "\\Test-Out-{}".format(i))
+                self.midi.FVtoMIDI(S, os.path.abspath(os.curdir) + "\\OutputSample-{}".format(i))
 
         return

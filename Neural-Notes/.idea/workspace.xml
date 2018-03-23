@@ -2,17 +2,23 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="caee319f-3794-4651-9229-4cc688bc4ca1" name="Default" comment="">
+      <change beforePath="" afterPath="$PROJECT_DIR$/OutputSample-0.midi" />
+      <change beforePath="" afterPath="$PROJECT_DIR$/OutputSample-1.midi" />
+      <change beforePath="" afterPath="$PROJECT_DIR$/OutputSample-2.midi" />
+      <change beforePath="" afterPath="$PROJECT_DIR$/OutputSample-3.midi" />
+      <change beforePath="" afterPath="$PROJECT_DIR$/OutputSample-4.midi" />
+      <change beforePath="" afterPath="$PROJECT_DIR$/OutputSample-5.midi" />
+      <change beforePath="" afterPath="$PROJECT_DIR$/OutputSample-6.midi" />
+      <change beforePath="" afterPath="$PROJECT_DIR$/OutputSample-7.midi" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
-      <change beforePath="$PROJECT_DIR$/GUIWrapper.py" afterPath="$PROJECT_DIR$/GUIWrapper.py" />
-      <change beforePath="$PROJECT_DIR$/MidiWrapper.py" afterPath="$PROJECT_DIR$/MidiWrapper.py" />
       <change beforePath="$PROJECT_DIR$/NeuralNotes.py" afterPath="$PROJECT_DIR$/NeuralNotes.py" />
       <change beforePath="$PROJECT_DIR$/RBMNet.py" afterPath="$PROJECT_DIR$/RBMNet.py" />
-      <change beforePath="$PROJECT_DIR$/Test-Converted.midi" afterPath="$PROJECT_DIR$/Test-Converted.midi" />
-      <change beforePath="$PROJECT_DIR$/Test-Out-0.midi" afterPath="$PROJECT_DIR$/Test-Out-0.midi" />
-      <change beforePath="$PROJECT_DIR$/Test-Out-1.midi" afterPath="$PROJECT_DIR$/Test-Out-1.midi" />
-      <change beforePath="$PROJECT_DIR$/Test-Out-2.midi" afterPath="$PROJECT_DIR$/Test-Out-2.midi" />
-      <change beforePath="$PROJECT_DIR$/Test-Out-3.midi" afterPath="$PROJECT_DIR$/Test-Out-3.midi" />
-      <change beforePath="$PROJECT_DIR$/Test-Out-4.midi" afterPath="$PROJECT_DIR$/Test-Out-4.midi" />
+      <change beforePath="$PROJECT_DIR$/Test-Converted.midi" afterPath="" />
+      <change beforePath="$PROJECT_DIR$/Test-Out-0.midi" afterPath="" />
+      <change beforePath="$PROJECT_DIR$/Test-Out-1.midi" afterPath="" />
+      <change beforePath="$PROJECT_DIR$/Test-Out-2.midi" afterPath="" />
+      <change beforePath="$PROJECT_DIR$/Test-Out-3.midi" afterPath="" />
+      <change beforePath="$PROJECT_DIR$/Test-Out-4.midi" afterPath="" />
       <change beforePath="$PROJECT_DIR$/models/rbmnet.chkpt.data-00000-of-00001" afterPath="$PROJECT_DIR$/models/rbmnet.chkpt.data-00000-of-00001" />
       <change beforePath="$PROJECT_DIR$/models/rbmnet.chkpt.index" afterPath="$PROJECT_DIR$/models/rbmnet.chkpt.index" />
       <change beforePath="$PROJECT_DIR$/models/rbmnet.chkpt.meta" afterPath="$PROJECT_DIR$/models/rbmnet.chkpt.meta" />
@@ -26,11 +32,11 @@
   </component>
   <component name="FileEditorManager">
     <leaf SIDE_TABS_SIZE_LIMIT_KEY="300">
-      <file leaf-file-name="NeuralNotes.py" pinned="false" current-in-tab="true">
+      <file leaf-file-name="NeuralNotes.py" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/NeuralNotes.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="499">
-              <caret line="141" column="56" lean-forward="true" selection-start-line="141" selection-start-column="56" selection-end-line="141" selection-end-column="56" />
+            <state relative-caret-position="382">
+              <caret line="56" column="0" lean-forward="false" selection-start-line="56" selection-start-column="0" selection-end-line="56" selection-end-column="0" />
               <folding>
                 <element signature="e#0#20#0" expanded="true" />
               </folding>
@@ -41,8 +47,8 @@
       <file leaf-file-name="MidiWrapper.py" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/MidiWrapper.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="425">
-              <caret line="40" column="31" lean-forward="false" selection-start-line="40" selection-start-column="31" selection-end-line="40" selection-end-column="31" />
+            <state relative-caret-position="-187">
+              <caret line="28" column="0" lean-forward="false" selection-start-line="28" selection-start-column="0" selection-end-line="28" selection-end-column="0" />
               <folding>
                 <element signature="e#0#11#0" expanded="true" />
               </folding>
@@ -50,11 +56,11 @@
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="RBMNet.py" pinned="false" current-in-tab="false">
+      <file leaf-file-name="RBMNet.py" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/RBMNet.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="1241">
-              <caret line="97" column="48" lean-forward="true" selection-start-line="97" selection-start-column="48" selection-end-line="97" selection-end-column="48" />
+            <state relative-caret-position="442">
+              <caret line="110" column="18" lean-forward="true" selection-start-line="110" selection-start-column="18" selection-end-line="110" selection-end-column="18" />
               <folding>
                 <element signature="e#0#23#0" expanded="true" />
               </folding>
@@ -101,8 +107,8 @@
       <list>
         <option value="$PROJECT_DIR$/GUIWrapper.py" />
         <option value="$PROJECT_DIR$/MidiWrapper.py" />
-        <option value="$PROJECT_DIR$/RBMNet.py" />
         <option value="$PROJECT_DIR$/NeuralNotes.py" />
+        <option value="$PROJECT_DIR$/RBMNet.py" />
       </list>
     </option>
   </component>
@@ -419,30 +425,30 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/MidiWrapper.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="425">
-          <caret line="40" column="31" lean-forward="false" selection-start-line="40" selection-start-column="31" selection-end-line="40" selection-end-column="31" />
+        <state relative-caret-position="-187">
+          <caret line="28" column="0" lean-forward="false" selection-start-line="28" selection-start-column="0" selection-end-line="28" selection-end-column="0" />
           <folding>
             <element signature="e#0#11#0" expanded="true" />
           </folding>
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/RBMNet.py">
+    <entry file="file://$PROJECT_DIR$/NeuralNotes.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="1241">
-          <caret line="97" column="48" lean-forward="true" selection-start-line="97" selection-start-column="48" selection-end-line="97" selection-end-column="48" />
+        <state relative-caret-position="382">
+          <caret line="56" column="0" lean-forward="false" selection-start-line="56" selection-start-column="0" selection-end-line="56" selection-end-column="0" />
           <folding>
-            <element signature="e#0#23#0" expanded="true" />
+            <element signature="e#0#20#0" expanded="true" />
           </folding>
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/NeuralNotes.py">
+    <entry file="file://$PROJECT_DIR$/RBMNet.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="499">
-          <caret line="141" column="56" lean-forward="true" selection-start-line="141" selection-start-column="56" selection-end-line="141" selection-end-column="56" />
+        <state relative-caret-position="442">
+          <caret line="110" column="18" lean-forward="true" selection-start-line="110" selection-start-column="18" selection-end-line="110" selection-end-column="18" />
           <folding>
-            <element signature="e#0#20#0" expanded="true" />
+            <element signature="e#0#23#0" expanded="true" />
           </folding>
         </state>
       </provider>
