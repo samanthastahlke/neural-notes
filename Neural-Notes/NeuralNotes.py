@@ -1,3 +1,27 @@
+'''
+NEURALNOTES.PY
+This is the script to run if you want to make some music!
+
+Other scripts:
+RBMNet is the home of the neural net.
+GUIWrapper wraps some Tkinter functionality and contains all the GUI code, as well as some basic app management.
+MidiWrapper contains utilities for reading/writing MIDI files.
+
+Acknowledgements:
+
+Our work is based on the project from this article:
+http://danshiebler.com/2016-08-10-musical-tensorflow-part-one-the-rbm/
+You can find the source code from that project here:
+https://github.com/dshieble/Music_RBM
+
+Additionally, we referenced these articles to help understand how RBMs work:
+https://medium.com/@oktaybahceci/generate-music-with-tensorflow-midis-4bf928a35c3a
+https://deeplearning4j.org/restrictedboltzmannmachine
+
+And, of course, the Tensorflow documentation:
+https://www.tensorflow.org/api_docs/python/
+'''
+
 import RBMNet as rbm
 import MidiWrapper as nn_midi
 import GUIWrapper as gui
@@ -157,7 +181,7 @@ mainUI.SetGenStatus("Ready" if rbmNet.IsTmpModelStored() else "No model availabl
 
 #Main loop.
 def AppMain():
-#
+
     while mainUI.running:
 
         frame.Tick()
@@ -175,6 +199,8 @@ def Cleanup():
     mainUI.tkRoot.destroy()
     return
 
+#Jump in to the application!
 frame.Tick()
 AppMain()
+#Destroy all the evidence!
 Cleanup()

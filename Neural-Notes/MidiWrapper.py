@@ -1,9 +1,12 @@
+'''
+MIDIWRAPPER.PY
+
+This script manages MIDI IO using the Python MIDI library.
+See "acknowledgements" in NeuralNotes.py.
+'''
+
 import midi
 import numpy as num
-
-#Thanks to the excellent online code reference for using Python-MIDI
-#to parse MIDI event lists for feature extraction:
-#http://danshiebler.com/2016-08-10-musical-tensorflow-part-one-the-rbm/
 
 class NNMidiUtility:
 
@@ -38,7 +41,6 @@ class NNMidiUtility:
         fv.append(curState)
 
         keepParsing = True
-        firstNotePlayed = False
         tick = 0
 
         while keepParsing:
@@ -62,7 +64,6 @@ class NNMidiUtility:
                     tEvent = track[tPos]
 
                     if isinstance(tEvent, midi.NoteEvent):
-                        firstNotePlayed = True
                         #Ignore out-of-range notes.
                         if (tEvent.pitch < self.lowBound) or (tEvent.pitch >= self.highBound):
                             pass
@@ -89,9 +90,6 @@ class NNMidiUtility:
 
             if all(tTime is None for tTime in trackTimes) or len(fv) > self.maxLength:
                 break
-
-            #if (tick % (midiEvents.resolution / 4) == (midiEvents.resolution / 8))#d:
-            #    fv.append(curState)
 
             tick += 1
 
@@ -128,6 +126,7 @@ class NNMidiUtility:
                 note = fState[n]
                 prevNote = prevState[n]
 
+                #Read in any note on/off events.
                 if prevNote[0] == 1:
                     if note[0] == 0:
                         notesOff.append(n)
@@ -136,12 +135,14 @@ class NNMidiUtility:
                 elif note[0] == 1:
                     notesOn.append(n)
 
+            #Write out events for releasing notes.
             for note in notesOff:
 
                 track.append(midi.NoteOffEvent(tick = (fTime - lTime) * self.tickScale,
                                                pitch = note + self.lowBound))
                 lTime = fTime
 
+            #Write out events for pressing notes.
             for note in notesOn:
 
                 track.append(midi.NoteOnEvent(tick = (fTime - lTime) * self.tickScale,
@@ -151,6 +152,7 @@ class NNMidiUtility:
 
             prevState = fState
 
+        #Cap the event list and output the MIDI file.
         track.append(midi.EndOfTrackEvent(tick = 1))
         midi.write_midifile("{}.midi".format(filename), midiEvents)
 

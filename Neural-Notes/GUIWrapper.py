@@ -1,3 +1,9 @@
+'''
+GUIWRAPPER.PY
+
+This script manages the GUI and basic app management.
+'''
+
 import tkinter as tk
 from tkinter import filedialog
 from PIL import Image, ImageTk
@@ -9,6 +15,22 @@ BTN_COL = '#202020'
 FIELD_COL = '#303030'
 LIT_COL = '#00ff96'
 PADDING = 4
+
+#Utility function (not that kind) using Tkinter to grab a directory choice from the user.
+def ChooseDirectory(title=""):
+
+    dialogOptions = {
+        "title": title,
+        "initialdir": ".",
+        "mustexist": True
+    }
+
+    directory = filedialog.askdirectory(**dialogOptions)
+
+    if directory == "":
+        return None
+
+    return directory
 
 '''
 FrameMgr class.
@@ -302,6 +324,7 @@ class MainUI:
 
         row += 1
 
+        #Generation fields.
         self.genContainer.rowconfigure(row,weight=1)
         self.genFieldsContainer = tk.Frame(self.genContainer,background=BG_COL)
         self.genFieldsContainer.grid_configure(row=row,column=col,sticky=tk.W,pady=PADDING*2,padx=PADDING*2)
@@ -365,6 +388,7 @@ class MainUI:
 
         self.mainContainer.tkraise()
 
+    #Updating status messages.
     def SetTrainStatus(self, msg):
         self.tLblStatus.configure(text="STATUS: " + msg)
         self.tLblStatus.update()
@@ -373,6 +397,7 @@ class MainUI:
         self.gLblStatus.configure(text="STATUS: " + msg)
         self.gLblStatus.update()
 
+    #Screen-switching.
     def GoMain(self, event):
         self.mainContainer.tkraise()
 
@@ -384,20 +409,3 @@ class MainUI:
 
     def Quit(self, event):
         self.running = False
-
-
-#Use Tkinter to grab a directory choice from the user.
-def ChooseDirectory(title=""):
-
-    dialogOptions = {
-        "title": title,
-        "initialdir": ".",
-        "mustexist": True
-    }
-
-    directory = filedialog.askdirectory(**dialogOptions)
-
-    if directory == "":
-        return None
-
-    return directory
