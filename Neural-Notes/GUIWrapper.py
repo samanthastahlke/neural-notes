@@ -304,6 +304,7 @@ class MainUI:
         self.gLblTitle = tk.Label(self.genContainer,
                                   text="Generation")
         configUILabel(self.gLblTitle)
+        self.gLblTitle.configure(foreground=LIT_COL)
         self.gLblTitle.grid(row=row,column=col,sticky=tk.W,pady=PADDING*2,padx=PADDING*2)
 
         row += 1
