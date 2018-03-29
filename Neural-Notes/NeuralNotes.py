@@ -116,7 +116,7 @@ def TriggerTrain(event):
         mainUI.tTxtEpochs.insert(0, rbm.DEFAULT_EPOCHS)
 
     try:
-        tmpLearning = int(mainUI.tTxtLearn.get())
+        tmpLearning = float(mainUI.tTxtLearn.get())
         rbm.DEFAULT_LEARNRATE = tmpLearning
     except Exception:
         mainUI.tTxtLearn.delete(0, 'end')
