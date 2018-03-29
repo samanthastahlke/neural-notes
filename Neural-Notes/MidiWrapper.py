@@ -15,8 +15,8 @@ class NNMidiUtility:
         #Establish the range of notes we'll consider in the model.
         self.lowBound = lowBound
         self.highBound = highBound
+        self.maxScale = 1000
         self.notespan = highBound - lowBound
-        self.maxLength = 100
         self.outputVelocity = 80
         self.tickScale = 60
 

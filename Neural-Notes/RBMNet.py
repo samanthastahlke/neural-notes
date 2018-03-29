@@ -152,12 +152,14 @@ class RBMNet:
         #Use Glob to grab all the MIDI files in the chosen directory.
         fileset = glob.glob("{}/*.mid*".format(directory))
 
+        self.midi.maxLength = DEFAULT_TIMESTEPS * 3;
+
         #Parse every file and convert it to a feature vector.
         for midifile in tqdm(fileset):
             try:
                 fv = num.array(self.midi.MIDItoFV(midifile))
 
-                if num.array(fv).shape[0] > self.timesteps:
+                if num.array(fv).shape[0] > DEFAULT_TIMESTEPS * 2:
                     self.trainDataset.append(fv)
             except Exception as e:
                 print(e)
