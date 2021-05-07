@@ -9,6 +9,10 @@ Samantha Stahlke - Lead Programmer and Tensorflow Apprentice
 ## About
 Neural Notes is an exploration of machine learning for digital music generation. We are creating an experimental tool for game developers and composers to create music samples with AI as part of the creative process.
 
+Our work for this project was based on the RBM Music project by Daniel Shieble (https://github.com/dshieble/Music_RBM). 
+
+You can view a video demo of our results [here](https://www.youtube.com/watch?v=xgecXJzwZ4k).
+
 ## Installation
 
 To use Neural Notes, you'll need Python, as well as the following dependencies (it is recommended that you use pip to install):  
